@@ -21,11 +21,11 @@ class App extends React.Component {
 
   post() {
     request
-      .get("/link")
-      .query({
+      .post("/link")
+      .send({
         title: this.state.title,
         comment: this.state.comment,
-        url: this.state.comment
+        url: this.state.url
       })
       .end((err, data) => {
         if (err) {

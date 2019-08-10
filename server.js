@@ -5,6 +5,7 @@ const db = new NeDB({
 });
 
 const express = require("express");
+const bodyParser = require("body-parser");
 const app = express();
 const port = 3001;
 
@@ -13,10 +14,15 @@ app.listen(port, err => {
   console.log("サーバーを起動しました", `http://localhost:${port}`);
 });
 
-app.get("/link", (req, res) => {
-  const q = req.query;
-  if (q) {
-    console.log(q);
+app.use(bodyParser.json());
+
+app.post("/link", (req, res) => {
+  const q = req.body;
+  console.log(q);
+  if (!q) {
+    // TODO: errorのstatusを送信して、React側でエラーメッセージを送信する
+    console.error("送信されたデータはありません");
+    return;
   }
   db.insert(
     {
