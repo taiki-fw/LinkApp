@@ -6,14 +6,14 @@ const db = new NeDB({
 
 const express = require("express");
 const app = express();
-const port = 8080;
+const port = 3001;
 
 app.listen(port, err => {
   if (err) throw new Error(err);
   console.log("サーバーを起動しました", `http://localhost:${port}`);
 });
 
-app.post("/link", (req, res) => {
+app.get("/link", (req, res) => {
   const q = req.query;
   if (q) {
     console.log(q);
