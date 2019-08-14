@@ -28,7 +28,8 @@ app.post("/link", (req, res) => {
     {
       title: q.title,
       comment: q.comment,
-      url: q.url
+      url: q.url,
+      createTime: new Date().getTime()
     },
     (err, doc) => {
       if (err) {
@@ -39,6 +40,19 @@ app.post("/link", (req, res) => {
       sendJSON(res, true, { id: doc._id }); // idをなぜ返しているの？
     }
   );
+});
+
+app.get("/api/getItems", (req, res) => {
+  db.find({})
+    .sort({ stime: 1 })
+    .exec((err, data) => {
+      if (err) {
+        sendJSON(res, false, { logs: [], msg: err });
+        return;
+      }
+      console.log(data);
+      sendJSON(res, true, { logs: data });
+    });
 });
 
 function sendJSON(res, result, obj) {

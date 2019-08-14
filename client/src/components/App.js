@@ -19,9 +19,20 @@ class App extends React.Component {
     });
   }
 
+  // DBに保存したデータの取得テスト
+  // get() {
+  //   request.get("/api/getItems").end((err, data) => {
+  //     if (err) {
+  //       console.error(err);
+  //       return;
+  //     }
+  //     console.log(data.body.logs);
+  //   });
+  // }
+
   post() {
     request
-      .post("/link")
+      .post("/api/link")
       .send({
         title: this.state.title,
         comment: this.state.comment,
@@ -72,6 +83,7 @@ class App extends React.Component {
         </label>
         <br />
         <button onClick={e => this.post()}>送信</button>
+        <button onClick={e => this.get()}>取得</button>
       </>
     );
   }
