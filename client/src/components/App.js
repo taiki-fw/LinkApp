@@ -7,7 +7,8 @@ class App extends React.Component {
     this.state = {
       title: "",
       comment: "",
-      url: ""
+      url: "",
+      alertTitle:"short"
     };
   }
 
@@ -17,13 +18,30 @@ class App extends React.Component {
     this.setState({
       [name]: newValue
     });
+    this.check()
+  }
+
+  check () {
+    let formBtn = document.getElementById("formBtn")
+    if (this.state.title.length > 20) {
+      this.setState({ alertTitle: "long" });
+    } else if (this.state.title.length <= 0) {
+      this.setState({ alertTitle: "short" });
+    } else if(this.state.title.length <= 20 && this.state.title.length >= 1){
+      this.setState({ alertTitle: "none" });
+    }
+    if(this.state.title !== "" && this.state.url !== "" && this.state.alertTitle === "none") {
+      formBtn.disabled = false
+    }else {
+      formBtn.disabled = true
+    }
   }
 
   post() {
     request
       .post("/link")
       .send({
-        title: this.state.title,
+       title: this.state.title,
         comment: this.state.comment,
         url: this.state.url
       })
@@ -36,11 +54,24 @@ class App extends React.Component {
   }
 
   render() {
+    const displayStyle = {
+      color: 'red',
+      fontSize: '5px'
+    }
+    let msgTitle = null
+    if (this.state.alertTitle === "long") {
+      msgTitle = <p style={displayStyle}>*20文字以内</p>
+    } else if (this.state.alertTitle === "none"){
+      msgTitle = <p></p>
+    } else if (this.state.alertTitle === "short") {
+      msgTitle = <p style={displayStyle}>*必須</p>
+    }
     return (
       <>
         <label>
           見出し
           <br />
+          {msgTitle}
           <input
             type="text"
             value={this.state.title}
@@ -71,8 +102,8 @@ class App extends React.Component {
           />
         </label>
         <br />
-        <button onClick={e => this.post()}>送信</button>
-      </>
+        <button id="formBtn" onClick={e => this.post()} disabled="disabled">送信</button>
+        </>
     );
   }
 }
