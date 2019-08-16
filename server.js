@@ -37,6 +37,7 @@ app.post("/link", (req, res) => {
         sendJSON(res, false, { msg: err });
         return;
       }
+      console.info("データ作成成功！", doc);
       sendJSON(res, true, { id: doc._id }); // idをなぜ返しているの？
     }
   );
@@ -50,7 +51,7 @@ app.get("/api/getItems", (req, res) => {
         sendJSON(res, false, { logs: [], msg: err });
         return;
       }
-      console.log(data);
+      console.log("データを送信しました", data);
       sendJSON(res, true, { logs: data });
     });
 });
