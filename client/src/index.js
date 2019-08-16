@@ -2,13 +2,13 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 import App from "./components/App";
-import CardList from "./components/CardList";
+import TopPage from "./components/TopPage";
 import * as serviceWorker from "./serviceWorker";
 
 const Application = () => (
   <>
     <App />
-    <CardList />
+    <TopPage />
   </>
 );
 

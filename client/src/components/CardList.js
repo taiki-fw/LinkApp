@@ -12,6 +12,10 @@ export default class CardList extends React.Component {
   }
 
   componentWillMount() {
+    this.getLinkData();
+  }
+
+  getLinkData() {
     request.get("/api/getItems").end((err, data) => {
       if (err) {
         console.error(err);
@@ -25,6 +29,13 @@ export default class CardList extends React.Component {
     const CardList = this.state.items.map(i => (
       <Card key={i._id} title={i.title} comment={i.comment} url={i.url} />
     ));
-    return <ul>{CardList}</ul>;
+    return (
+      <>
+        <div>
+          <button onClick={() => this.getLinkData()}>再読み込み</button>
+        </div>
+        <ul>{CardList}</ul>
+      </>
+    );
   }
 }
