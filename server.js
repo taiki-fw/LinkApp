@@ -16,7 +16,7 @@ app.listen(port, err => {
 
 app.use(bodyParser.json());
 
-app.post("/link", (req, res) => {
+app.post("/api/link", (req, res) => {
   const q = req.body;
   console.log(q);
   if (!q) {
@@ -37,6 +37,7 @@ app.post("/link", (req, res) => {
         sendJSON(res, false, { msg: err });
         return;
       }
+      console.info("データ作成成功！\n", doc);
       sendJSON(res, true, { id: doc._id }); // idをなぜ返しているの？
     }
   );
@@ -50,7 +51,7 @@ app.get("/api/getItems", (req, res) => {
         sendJSON(res, false, { logs: [], msg: err });
         return;
       }
-      console.log(data);
+      console.log("データを送信しました\n", data);
       sendJSON(res, true, { logs: data });
     });
 });
