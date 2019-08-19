@@ -7,7 +7,9 @@ export default class CardList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      items: []
+      items: [],
+      currentPage: 1,
+      itemPerPage: 12
     };
   }
 
@@ -26,9 +28,15 @@ export default class CardList extends React.Component {
   }
 
   render() {
-    const CardList = this.state.items.map(i => (
+    const IndexOfLastItem = this.state.currentPage * this.state.itemPerPage;
+    const IndexOfFirstItem = IndexOfLastItem - this.state.itemPerPage;
+
+    const limitCard = this.state.items.slice(IndexOfFirstItem, IndexOfLastItem);
+
+    const CardList = limitCard.map(i => (
       <Card key={i._id} title={i.title} comment={i.comment} url={i.url} />
     ));
+
     return (
       <>
         <div>
