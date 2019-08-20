@@ -45,7 +45,7 @@ app.post("/api/link", (req, res) => {
 
 app.get("/api/getItems", (req, res) => {
   db.find({})
-    .sort({ stime: 1 })
+    .sort({ createTime: 1 })
     .exec((err, data) => {
       if (err) {
         sendJSON(res, false, { logs: [], msg: err });

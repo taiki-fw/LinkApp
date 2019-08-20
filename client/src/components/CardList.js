@@ -27,11 +27,9 @@ export default class CardList extends React.Component {
     });
   }
 
-  itemsSort(items) {
-    if (typeof items !== "object") {
-      console.error("リンクが配列でAPIから取得出来ていません");
-      return;
-    }
+  pageNumClick(e) {
+    const pageNum = e.target.id;
+    this.setState({ currentPage: pageNum });
   }
 
   render() {
@@ -44,12 +42,27 @@ export default class CardList extends React.Component {
       <Card key={i._id} title={i.title} comment={i.comment} url={i.url} />
     ));
 
+    const PagenationBtn = [];
+    for (
+      let i = 1;
+      i <= Math.ceil(this.state.items.length / this.state.itemPerPage);
+      i++
+    ) {
+      PagenationBtn.push(i);
+    }
+    const RenderPagenationBtn = PagenationBtn.map(n => (
+      <li key={n} id={n} onClick={e => this.pageNumClick(e)}>
+        {n}
+      </li>
+    ));
+
     return (
       <>
         <div>
           <button onClick={() => this.getLinkData()}>再読み込み</button>
         </div>
         <ul>{CardList}</ul>
+        <ul>{RenderPagenationBtn}</ul>
       </>
     );
   }
