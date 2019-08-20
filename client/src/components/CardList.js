@@ -27,6 +27,13 @@ export default class CardList extends React.Component {
     });
   }
 
+  itemsSort(items) {
+    if (typeof items !== "object") {
+      console.error("リンクが配列でAPIから取得出来ていません");
+      return;
+    }
+  }
+
   render() {
     const IndexOfLastItem = this.state.currentPage * this.state.itemPerPage;
     const IndexOfFirstItem = IndexOfLastItem - this.state.itemPerPage;
