@@ -44,16 +44,14 @@ app.post("/api/link", (req, res) => {
 });
 
 app.get("/api/getItems", (req, res) => {
-  db.find({})
-    .sort({ stime: 1 })
-    .exec((err, data) => {
-      if (err) {
-        sendJSON(res, false, { logs: [], msg: err });
-        return;
-      }
-      console.log("データを送信しました\n", data);
-      sendJSON(res, true, { logs: data });
-    });
+  db.find({}).exec((err, data) => {
+    if (err) {
+      sendJSON(res, false, { logs: [], msg: err });
+      return;
+    }
+    console.log("データを送信しました\n", data);
+    sendJSON(res, true, { logs: data });
+  });
 });
 
 function sendJSON(res, result, obj) {
