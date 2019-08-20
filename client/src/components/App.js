@@ -8,7 +8,8 @@ class App extends React.Component {
       title: "",
       comment: "",
       url: "",
-      alertTitle:"short"
+      alertTitle:"short",
+      send: true
     };
   }
 
@@ -18,23 +19,38 @@ class App extends React.Component {
     this.setState({
       [name]: newValue
     });
-    this.check()
+    this.check(e)
   }
 
-  check () {
+  check (e) {
     let formBtn = document.getElementById("formBtn")
-    if (this.state.title.length > 20) {
-      this.setState({ alertTitle: "long" });
-    } else if (this.state.title.length <= 0) {
-      this.setState({ alertTitle: "short" });
-    } else if(this.state.title.length <= 20 && this.state.title.length >= 1){
-      this.setState({ alertTitle: "none" });
+    let maxLength = 20
+    let minLength = 0
+    let titleLength = e.target.value.length
+    let checkValue = e.target.value
+    let checkUrl = checkValue.match(/^(https?|ftp)(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)$/)
+    let alertType = "none"
+    let sendBtn = true
+    if(e.target.name === "title"){
+      if (titleLength > maxLength) {
+        alertType = "long"
+      } else if (titleLength <= minLength) {
+        alertType = "short"
+      } else {
+        alertType = "none"
+      }
     }
-    if(this.state.title !== "" && this.state.url !== "" && this.state.alertTitle === "none") {
-      formBtn.disabled = false
+    this.setState({ alertTitle: alertType })
+    console.log(alertType)
+    if(this.state.title || this.state.url || alertType !== "none" || checkUrl) {
+      sendBtn = true
     }else {
-      formBtn.disabled = true
+      sendBtn = false
     }
+    console.log(sendBtn)
+    this.setState({ send: sendBtn})
+    formBtn.disabled = this.state.send
+    console.log(formBtn.disabled)
   }
 
   post() {
@@ -59,12 +75,14 @@ class App extends React.Component {
       fontSize: '5px'
     }
     let msgTitle = null
-    if (this.state.alertTitle === "long") {
-      msgTitle = <p style={displayStyle}>*20文字以内</p>
-    } else if (this.state.alertTitle === "none"){
-      msgTitle = <p></p>
-    } else if (this.state.alertTitle === "short") {
-      msgTitle = <p style={displayStyle}>*必須</p>
+    let alertType = this.state.alertTitle
+    switch(alertType) {
+      case "long":
+        msgTitle = <p style={displayStyle}>*20文字以内</p>
+      case "short":
+        msgTitle = <p></p>
+      case "none":
+        msgTitle = <p style={displayStyle}>*必須</p>
     }
     return (
       <>
