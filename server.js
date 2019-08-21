@@ -54,6 +54,31 @@ app.get("/api/getItems", (req, res) => {
   });
 });
 
+app.put("/api/editItem", (req, res) => {
+  const q = req.body;
+  console.log(q, "送信されました");
+  console.log("送信されていません");
+  db.update(
+    { _id: q.id },
+    {
+      $set: {
+        title: q.title,
+        comment: q.comment,
+        url: q.url
+      }
+    },
+    {},
+    (err, numReplaced) => {
+      if (err) {
+        console.error(err);
+        sendJSON(res, false, { msg: err });
+        return;
+      }
+      console.info(numReplaced, "個のデータが変更されました");
+    }
+  );
+});
+
 function sendJSON(res, result, obj) {
   obj["result"] = result;
   res.json(obj);

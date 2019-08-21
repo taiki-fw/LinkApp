@@ -41,7 +41,14 @@ export default class CardList extends React.Component {
       .slice(IndexOfFirstItem, IndexOfLastItem);
 
     const CardList = limitCard.map(i => (
-      <Card key={i._id} title={i.title} comment={i.comment} url={i.url} />
+      <Card
+        key={i._id}
+        id={i._id}
+        title={i.title}
+        comment={i.comment}
+        url={i.url}
+        getLinkData={() => this.getLinkData()}
+      />
     ));
 
     const PagenationBtn = [];
@@ -53,7 +60,12 @@ export default class CardList extends React.Component {
       PagenationBtn.push(i);
     }
     const RenderPagenationBtn = PagenationBtn.map(n => (
-      <li key={n} id={n} onClick={e => this.pageNumClick(e)}>
+      <li
+        key={n}
+        id={n}
+        onClick={e => this.pageNumClick(e)}
+        style={styles.pageBtn}
+      >
         {n}
       </li>
     ));
@@ -63,9 +75,23 @@ export default class CardList extends React.Component {
         <div>
           <button onClick={() => this.getLinkData()}>再読み込み</button>
         </div>
-        <ul>{CardList}</ul>
-        <ul>{RenderPagenationBtn}</ul>
+        <ul style={styles.ul}>{CardList}</ul>
+        <ul style={styles.ul}>{RenderPagenationBtn}</ul>
       </>
     );
   }
 }
+
+const styles = {
+  ul: {
+    display: "flex",
+    flexWrap: "wrap",
+    listStyleType: "none"
+  },
+  pageBtn: {
+    padding: "0.25em 0.5em",
+    margin: "0.1em",
+    border: "1px solid blue",
+    color: "blue"
+  }
+};

@@ -1,6 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
+import "./reset.css";
+
 import App from "./components/App";
 import TopPage from "./components/TopPage";
 import * as serviceWorker from "./serviceWorker";
