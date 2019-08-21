@@ -1,0 +1,8 @@
+* {
+  box-sizing: border-box;
+}
+
+h3,
+p {
+  margin: 0;
+}

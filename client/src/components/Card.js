@@ -56,8 +56,8 @@ class Card extends React.Component {
             <a href={this.state.url} style={styles.a}>
               <h3>{this.state.title}</h3>
               <p>{this.state.comment}</p>
+              {actionBtn}
             </a>
-            {actionBtn}
           </li>
         ) : (
           <li style={styles.li}>
@@ -87,18 +87,26 @@ class Card extends React.Component {
   }
 }
 
+// とりあえずのスタイル
 const styles = {
   li: {
-    display: "flex",
-    alignItems: "center"
+    backgroundColor: "#EDF0F2",
+    padding: "1em",
+    margin: "0.5em",
+    width: "25%"
   },
   a: {
+    position: "relative",
+    zIndex: "1",
+    display: "block",
     textDecoration: "none",
-    color: "black",
-    display: "flex"
+    color: "#0D3F67"
   },
   button: {
-    cursor: "pointer"
+    position: "absolute",
+    zIndex: "2",
+    right: "0",
+    top: "0"
   }
 };
 
