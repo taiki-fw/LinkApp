@@ -41,7 +41,14 @@ export default class CardList extends React.Component {
       .slice(IndexOfFirstItem, IndexOfLastItem);
 
     const CardList = limitCard.map(i => (
-      <Card key={i._id} title={i.title} comment={i.comment} url={i.url} />
+      <Card
+        key={i._id}
+        id={i._id}
+        title={i.title}
+        comment={i.comment}
+        url={i.url}
+        getLinkData={() => this.getLinkData()}
+      />
     ));
 
     const PagenationBtn = [];

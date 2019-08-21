@@ -55,7 +55,9 @@ app.get("/api/getItems", (req, res) => {
 });
 
 app.put("/api/editItem", (req, res) => {
-  const q = req.query;
+  const q = req.body;
+  console.log(q, "送信されました");
+  console.log("送信されていません");
   db.update(
     { _id: q.id },
     {
