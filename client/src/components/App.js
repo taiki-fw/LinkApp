@@ -19,15 +19,6 @@ class App extends React.Component {
     });
   }
 
-  check () {
-    //let checkUrl = checkUrlValue.match(/^(https?|ftp)(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)$/)
-    // if(checkUrl[0] === checkUrlValue) {
-    //   this.setState({ alertUrl: false })
-    // }else {
-    //   this.setState({ alertUrl: true })
-    // }
-  }
-
   post() {
     request
       .post("/link")
