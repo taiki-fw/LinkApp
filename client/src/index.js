@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import "./reset.css";
 
@@ -8,10 +9,12 @@ import TopPage from "./components/TopPage";
 import * as serviceWorker from "./serviceWorker";
 
 const Application = () => (
-  <>
-    <App />
-    <TopPage />
-  </>
+  <Router>
+    <Switch>
+      <Route exact path="/" component={TopPage} />
+      <Route path="/post" component={App} />
+    </Switch>
+  </Router>
 );
 
 ReactDOM.render(<Application />, document.getElementById("root"));

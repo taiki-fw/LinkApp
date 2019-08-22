@@ -72,9 +72,6 @@ export default class CardList extends React.Component {
 
     return (
       <>
-        <div>
-          <button onClick={() => this.getLinkData()}>再読み込み</button>
-        </div>
         <ul style={styles.ul}>{CardList}</ul>
         <ul style={styles.ul}>{RenderPagenationBtn}</ul>
       </>

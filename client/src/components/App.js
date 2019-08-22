@@ -1,4 +1,5 @@
 import React from "react";
+import { withRouter, Link } from "react-router-dom";
 import request from "superagent";
 
 class App extends React.Component {
@@ -19,17 +20,6 @@ class App extends React.Component {
     });
   }
 
-  // DBに保存したデータの取得テスト
-  // get() {
-  //   request.get("/api/getItems").end((err, data) => {
-  //     if (err) {
-  //       console.error(err);
-  //       return;
-  //     }
-  //     console.log(data.body.logs);
-  //   });
-  // }
-
   post() {
     request
       .post("/api/link")
@@ -44,11 +34,15 @@ class App extends React.Component {
           return;
         }
       });
+    this.props.history.push("/");
   }
 
   render() {
     return (
       <>
+        <Link to="/" style={styles.Link}>
+          キャンセル
+        </Link>
         <label>
           見出し
           <br />
@@ -83,10 +77,20 @@ class App extends React.Component {
         </label>
         <br />
         <button onClick={e => this.post()}>送信</button>
-        <button onClick={e => this.get()}>取得</button>
       </>
     );
   }
 }
 
-export default App;
+const styles = {
+  Link: {
+    display: "block",
+    textDecoration: "none",
+    color: "#0D3F67",
+    backgroundColor: "#fff",
+    borderRadius: "5px",
+    padding: "0.5em 1.5em 0.5em 0"
+  }
+};
+
+export default withRouter(App);
