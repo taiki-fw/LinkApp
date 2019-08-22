@@ -8,8 +8,6 @@ class App extends React.Component {
       title: "",
       comment: "",
       url: "",
-      alertTitle:"short",
-      send: true
     };
   }
 
@@ -19,38 +17,15 @@ class App extends React.Component {
     this.setState({
       [name]: newValue
     });
-    this.check(e)
   }
 
-  check (e) {
-    let formBtn = document.getElementById("formBtn")
-    let maxLength = 20
-    let minLength = 0
-    let titleLength = e.target.value.length
-    let checkValue = e.target.value
-    let checkUrl = checkValue.match(/^(https?|ftp)(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)$/)
-    let alertType = "none"
-    let sendBtn = true
-    if(e.target.name === "title"){
-      if (titleLength > maxLength) {
-        alertType = "long"
-      } else if (titleLength <= minLength) {
-        alertType = "short"
-      } else {
-        alertType = "none"
-      }
-    }
-    this.setState({ alertTitle: alertType })
-    console.log(alertType)
-    if(this.state.title || this.state.url || alertType !== "none" || checkUrl) {
-      sendBtn = true
-    }else {
-      sendBtn = false
-    }
-    console.log(sendBtn)
-    this.setState({ send: sendBtn})
-    formBtn.disabled = this.state.send
-    console.log(formBtn.disabled)
+  check () {
+    //let checkUrl = checkUrlValue.match(/^(https?|ftp)(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)$/)
+    // if(checkUrl[0] === checkUrlValue) {
+    //   this.setState({ alertUrl: false })
+    // }else {
+    //   this.setState({ alertUrl: true })
+    // }
   }
 
   post() {
@@ -75,15 +50,62 @@ class App extends React.Component {
       fontSize: '5px'
     }
     let msgTitle = null
-    let alertType = this.state.alertTitle
-    switch(alertType) {
-      case "long":
-        msgTitle = <p style={displayStyle}>*20文字以内</p>
-      case "short":
-        msgTitle = <p></p>
-      case "none":
-        msgTitle = <p style={displayStyle}>*必須</p>
+    let msgUrl = null
+    let sendDisable = true
+    let sendUrlCheck = "ng"
+    let sendBtn = null
+    let sendTitleCheck = "ng"
+    let maxLength = 20
+    let minLength = 0
+    let titleLength = this.state.title.length
+    let checkUrl = this.state.url.match(/^https?(:\/\/[-_.!~*'()a-zA-Z0-9;/?:@&=+$,%#]+)$/)
+
+    if (titleLength > maxLength) {
+      msgTitle = <p style={displayStyle}>*20文字以内</p>
+      sendTitleCheck = "ng"
+    } else if (titleLength <= minLength) {
+      msgTitle = <p style={displayStyle}>*必須</p>
+      sendTitleCheck = "ng"
+    } else {
+      msgTitle = <p></p>
+      sendTitleCheck = "ok"
     }
+
+    // switch(alertTitleType) {
+    //   case "long":
+    //     msgTitle = <p style={displayStyle}>*20文字以内</p>
+    //   case "none":
+    //     msgTitle = <p></p>
+    //   case "short":
+    //     msgTitle = <p style={displayStyle}>*必須</p>
+    // }
+
+    if (this.state.url === ""){
+      msgUrl = <p style={displayStyle}>*必須</p>
+      sendUrlCheck = "ng"
+    }else if (checkUrl !== null){
+      msgUrl = <p></p>
+      sendUrlCheck = "ok"
+    }else {
+      msgUrl = <p style={displayStyle}>リンクを貼ってください</p>
+      sendUrlCheck = "ng"
+    }
+
+    // switch(alertUrlType) {
+    //   case true:
+    //     msgUrl = <p style={displayStyle}>*必須</p>
+    //   case false:
+    //     msgUrl = <p></p>
+    // }
+
+    if (this.state.title && this.state.url && sendTitleCheck === "ok" && sendUrlCheck === "ok") {
+      sendDisable = false
+    } else {
+      sendDisable = true
+    }
+
+    sendBtn = < button id="formBtn" onClick={e => this.post()} disabled={sendDisable} > 送信</button >
+  
     return (
       <>
         <label>
@@ -112,6 +134,7 @@ class App extends React.Component {
         <label>
           URL
           <br />
+          {msgUrl}
           <input
             type="text"
             value={this.state.url}
@@ -120,7 +143,7 @@ class App extends React.Component {
           />
         </label>
         <br />
-        <button id="formBtn" onClick={e => this.post()} disabled="disabled">送信</button>
+        {sendBtn}
         </>
     );
   }
