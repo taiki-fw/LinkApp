@@ -8,7 +8,7 @@ class App extends React.Component {
     this.state = {
       title: "",
       comment: "",
-      url: ""
+      url: "",
     };
   }
 
@@ -24,7 +24,7 @@ class App extends React.Component {
     request
       .post("/api/link")
       .send({
-        title: this.state.title,
+       title: this.state.title,
         comment: this.state.comment,
         url: this.state.url
       })
@@ -38,6 +38,67 @@ class App extends React.Component {
   }
 
   render() {
+    const displayStyle = {
+      color: 'red',
+      fontSize: '5px'
+    }
+    let msgTitle = null
+    let msgUrl = null
+    let sendDisable = true
+    let sendUrlCheck = "ng"
+    let sendBtn = null
+    let sendTitleCheck = "ng"
+    let maxLength = 20
+    let minLength = 0
+    let titleLength = this.state.title.length
+    let checkUrl = this.state.url.match(/^https?(:\/\/[-_.!~*'()a-zA-Z0-9;/?:@&=+$,%#]+)$/)
+
+    if (titleLength > maxLength) {
+      msgTitle = <p style={displayStyle}>*20文字以内</p>
+      sendTitleCheck = "ng"
+    } else if (titleLength <= minLength) {
+      msgTitle = <p style={displayStyle}>*必須</p>
+      sendTitleCheck = "ng"
+    } else {
+      msgTitle = <p></p>
+      sendTitleCheck = "ok"
+    }
+
+    // switch(alertTitleType) {
+    //   case "long":
+    //     msgTitle = <p style={displayStyle}>*20文字以内</p>
+    //   case "none":
+    //     msgTitle = <p></p>
+    //   case "short":
+    //     msgTitle = <p style={displayStyle}>*必須</p>
+    // }
+
+    if (this.state.url === ""){
+      msgUrl = <p style={displayStyle}>*必須</p>
+      sendUrlCheck = "ng"
+    }else if (checkUrl !== null){
+      msgUrl = <p></p>
+      sendUrlCheck = "ok"
+    }else {
+      msgUrl = <p style={displayStyle}>リンクを貼ってください</p>
+      sendUrlCheck = "ng"
+    }
+
+    // switch(alertUrlType) {
+    //   case true:
+    //     msgUrl = <p style={displayStyle}>*必須</p>
+    //   case false:
+    //     msgUrl = <p></p>
+    // }
+
+    if (this.state.title && this.state.url && sendTitleCheck === "ok" && sendUrlCheck === "ok") {
+      sendDisable = false
+    } else {
+      sendDisable = true
+    }
+
+    sendBtn = < button id="formBtn" onClick={e => this.post()} disabled={sendDisable} > 送信</button >
+  
     return (
       <>
         <Link to="/" style={styles.Link}>
@@ -46,6 +107,7 @@ class App extends React.Component {
         <label>
           見出し
           <br />
+          {msgTitle}
           <input
             type="text"
             value={this.state.title}
@@ -68,6 +130,7 @@ class App extends React.Component {
         <label>
           URL
           <br />
+          {msgUrl}
           <input
             type="text"
             value={this.state.url}
@@ -76,8 +139,8 @@ class App extends React.Component {
           />
         </label>
         <br />
-        <button onClick={e => this.post()}>送信</button>
-      </>
+        {sendBtn}
+        </>
     );
   }
 }
