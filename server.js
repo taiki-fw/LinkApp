@@ -1,6 +1,11 @@
 const NeDB = require("nedb");
 const db = new NeDB({
-  filename: __dirname + "/post.db",
+  filename: __dirname + "/DB/post.db",
+  autoload: true
+});
+
+const users = new NeDB({
+  filename: __dirname + "/DB/users.db",
   autoload: true
 });
 
@@ -77,6 +82,42 @@ app.put("/api/editItem", (req, res) => {
       console.info(numReplaced, "個のデータが変更されました");
     }
   );
+});
+
+app.post("/api/user/registration", (req, res) => {
+  const q = req.body;
+  if (!q) {
+    console.error("データが空です", q);
+    return;
+  }
+  users.insert(
+    {
+      name: q.name,
+      email: q.email,
+      password: q.password,
+      createTime: new Date().getTime()
+    },
+    (err, doc) => {
+      if (err) {
+        console.error(err);
+        sendJSON(res, false, { msg: err });
+        return;
+      }
+      console.info("ユーザーデータ作成成功！\n", doc);
+      sendJSON(res, true, { id: doc._id }); // idをなぜ返しているの？
+    }
+  );
+});
+
+app.get("/api/users", (req, res) => {
+  users.find({}).exec((err, data) => {
+    if (err) {
+      sendJSON(res, false, { logs: [], msg: err });
+      return;
+    }
+    console.log("データを送信しました\n", data);
+    sendJSON(res, true, { logs: data });
+  });
 });
 
 function sendJSON(res, result, obj) {
