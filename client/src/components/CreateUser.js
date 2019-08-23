@@ -1,7 +1,8 @@
 import React from "react";
+import { withRouter } from "react-router-dom";
 import request from "superagent";
 
-export default class CreateUser extends React.Component {
+class CreateUser extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -38,6 +39,7 @@ export default class CreateUser extends React.Component {
           return;
         }
         console.log(res);
+        this.props.history.push("/user/login");
       });
   }
 
@@ -85,3 +87,5 @@ export default class CreateUser extends React.Component {
     );
   }
 }
+
+export default withRouter(CreateUser);
