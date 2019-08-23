@@ -7,6 +7,7 @@ import "./reset.css";
 import App from "./components/App";
 import TopPage from "./components/TopPage";
 import CreateUser from "./components/CreateUser";
+import Login from "./components/Loing";
 import * as serviceWorker from "./serviceWorker";
 
 const Application = () => (
@@ -15,6 +16,7 @@ const Application = () => (
       <Route exact path="/" component={TopPage} />
       <Route path="/post" component={App} />
       <Route path="/user/registrations" component={CreateUser} />
+      <Route path="/user/login" component={Login} />
     </Switch>
   </Router>
 );

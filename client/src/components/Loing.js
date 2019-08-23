@@ -26,6 +26,7 @@ export default class Login extends React.Component {
             <input
               type="email"
               name="email"
+              value={this.state.email}
               onChange={e => this.handleChange(e)}
             />
             <br />
@@ -36,6 +37,7 @@ export default class Login extends React.Component {
             <input
               type="password"
               name="password"
+              value={this.state.password}
               onChange={e => this.handleChange(e)}
             />
             <br />

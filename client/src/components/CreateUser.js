@@ -52,6 +52,7 @@ export default class CreateUser extends React.Component {
             <input
               type="text"
               name="name"
+              value={this.state.name}
               onChange={e => this.handleChange(e)}
             />
             <br />
@@ -62,6 +63,7 @@ export default class CreateUser extends React.Component {
             <input
               type="email"
               name="email"
+              value={this.state.email}
               onChange={e => this.handleChange(e)}
             />
             <br />
@@ -72,6 +74,7 @@ export default class CreateUser extends React.Component {
             <input
               type="password"
               name="password"
+              value={this.state.password}
               onChange={e => this.handleChange(e)}
             />
             <br />
