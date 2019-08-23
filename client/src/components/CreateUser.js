@@ -1,4 +1,5 @@
 import React from "react";
+import request from "superagent";
 
 export default class CreateUser extends React.Component {
   constructor(props) {
@@ -18,11 +19,33 @@ export default class CreateUser extends React.Component {
     });
   }
 
+  formSubmit(e) {
+    e.preventDefault();
+    this.userRegistrations();
+  }
+
+  userRegistrations() {
+    request
+      .post("/api/user/registration")
+      .send({
+        name: this.state.name,
+        email: this.state.email,
+        password: this.state.password
+      })
+      .end((err, res) => {
+        if (err) {
+          window.alert(err);
+          return;
+        }
+        console.log(res);
+      });
+  }
+
   render() {
     return (
       <>
         <h1>Welcome</h1>
-        <form action="">
+        <form onSubmit={e => this.formSubmit(e)}>
           <label>
             名前
             <br />
