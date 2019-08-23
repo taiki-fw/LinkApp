@@ -1,11 +1,11 @@
 const NeDB = require("nedb");
 const db = new NeDB({
-  filename: __dirname + "/post.db",
+  filename: __dirname + "/DB/post.db",
   autoload: true
 });
 
 const users = new NeDB({
-  filename: __dirname + "/users.db",
+  filename: __dirname + "/DB/users.db",
   autoload: true
 });
 
