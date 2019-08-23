@@ -15,7 +15,7 @@ class Card extends React.Component {
   handleChange(e) {
     const newValue = e.target.value;
     this.setState({
-      [e.target.name]: e.target.value
+      [e.target.name]: newValue
     });
   }
 
