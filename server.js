@@ -109,6 +109,17 @@ app.post("/api/user/registration", (req, res) => {
   );
 });
 
+app.get("/api/users", (req, res) => {
+  users.find({}).exec((err, data) => {
+    if (err) {
+      sendJSON(res, false, { logs: [], msg: err });
+      return;
+    }
+    console.log("データを送信しました\n", data);
+    sendJSON(res, true, { logs: data });
+  });
+});
+
 function sendJSON(res, result, obj) {
   obj["result"] = result;
   res.json(obj);
