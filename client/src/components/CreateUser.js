@@ -38,6 +38,10 @@ class CreateUser extends React.Component {
           window.alert(err);
           return;
         }
+        if (res.body.msg.errorType === "uniqueViolated") {
+          window.alert("このメールアドレスは既に使用されています");
+          return;
+        }
         console.log(res);
         this.props.history.push("/user/login");
       });

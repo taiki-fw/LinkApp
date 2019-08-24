@@ -7,6 +7,12 @@ const users = new NeDB({
   filename: __dirname + "/DB/users.db",
   autoload: true
 });
+users.ensureIndex({ fieldName: "email", unique: true }, err => {
+  if (err) {
+    console.error(err);
+    return;
+  }
+});
 
 const bcrypt = require("bcrypt");
 const saltRounds = 10; //ストレッチング回数
