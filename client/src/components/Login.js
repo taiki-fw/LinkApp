@@ -17,13 +17,35 @@ export default class Login extends React.Component {
     });
   }
 
-  login() {}
+  Submit(e) {
+    e.preventDefault();
+    this.login();
+  }
+
+  login() {
+    request
+      .post("/api/user/login")
+      .send({
+        email: this.state.email,
+        password: this.state.password
+      })
+      .end((err, res) => {
+        if (err) {
+          console.log(err);
+          return;
+        }
+        if (res) {
+          window.alert(res.body.msg);
+          this.props.history.push("/");
+        }
+      });
+  }
 
   render() {
     return (
       <>
         <h1>Welcome Home</h1>
-        <form>
+        <form onSubmit={e => this.Submit(e)}>
           <label>
             メールアドレス
             <br />

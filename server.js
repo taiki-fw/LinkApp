@@ -17,6 +17,8 @@ users.ensureIndex({ fieldName: "email", unique: true }, err => {
 const bcrypt = require("bcrypt");
 const saltRounds = 10; //ストレッチング回数
 
+const session = require("express-session");
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
@@ -26,6 +28,13 @@ app.listen(port, err => {
   console.log("サーバーを起動しました", `http://localhost:${port}`);
 });
 app.use(bodyParser.json());
+app.use(
+  session({
+    secret: "keyboard cat",
+    resave: false,
+    saveUninitialized: true
+  })
+);
 
 app.post("/api/link", (req, res) => {
   const q = req.body;
@@ -134,7 +143,7 @@ app.post("/api/user/login", (req, res) => {
   }
   users.find(
     {
-      name: q.name,
+      email: q.email,
       password: bcrypt.hashSync(q.password, saltRounds)
     },
     (err, doc) => {
