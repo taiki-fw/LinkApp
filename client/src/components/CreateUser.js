@@ -8,7 +8,8 @@ class CreateUser extends React.Component {
     this.state = {
       name: "",
       email: "",
-      password: ""
+      password: "",
+      errMsg: ""
     };
   }
 
@@ -38,9 +39,11 @@ class CreateUser extends React.Component {
           window.alert(err);
           return;
         }
-        if (res.body.msg.errorType === "uniqueViolated") {
-          window.alert("このメールアドレスは既に使用されています");
-          return;
+        switch (res.body.msg.errorType) {
+          case "uniqueViolated":
+            this.setState({ errMsg: "既に登録されているメールアドレスです" });
+            return;
+          default:
         }
         console.log(res);
         this.props.history.push("/user/login");
@@ -48,6 +51,11 @@ class CreateUser extends React.Component {
   }
 
   render() {
+    const errMsg = this.state.errMsg ? (
+      <span style={styles.err}>{this.state.errMsg}</span>
+    ) : (
+      ""
+    );
     return (
       <>
         <h1>Welcome</h1>
@@ -73,6 +81,7 @@ class CreateUser extends React.Component {
               onChange={e => this.handleChange(e)}
             />
             <br />
+            {errMsg}
           </label>
           <label>
             パスワード
@@ -91,5 +100,11 @@ class CreateUser extends React.Component {
     );
   }
 }
+
+const styles = {
+  err: {
+    color: "red"
+  }
+};
 
 export default withRouter(CreateUser);
