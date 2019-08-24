@@ -1,4 +1,5 @@
 import React from "react";
+import request from "superagent";
 
 export default class Login extends React.Component {
   constructor(props) {
@@ -15,6 +16,9 @@ export default class Login extends React.Component {
       [key]: newValue
     });
   }
+
+  login() {}
+
   render() {
     return (
       <>

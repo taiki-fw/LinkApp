@@ -126,6 +126,28 @@ app.post("/api/user/registration", (req, res) => {
   );
 });
 
+app.post("/api/user/login", (req, res) => {
+  const q = req.body;
+  if (!q) {
+    console.log("データが空です", q);
+    return;
+  }
+  users.find(
+    {
+      name: q.name,
+      password: bcrypt.hashSync(q.password, saltRounds)
+    },
+    (err, doc) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+      req.session.user_id = doc.name;
+      sendJSON(res, true, { msg: "userの認証に成功しました" });
+    }
+  );
+});
+
 function sendJSON(res, result, obj) {
   obj["result"] = result;
   res.json(obj);
