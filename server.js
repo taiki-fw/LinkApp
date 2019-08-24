@@ -3,22 +3,22 @@ const db = new NeDB({
   filename: __dirname + "/DB/post.db",
   autoload: true
 });
-
 const users = new NeDB({
   filename: __dirname + "/DB/users.db",
   autoload: true
 });
 
+const bcrypt = require("bcrypt");
+const saltRounds = 10; //ストレッチング回数
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 const port = 3001;
-
 app.listen(port, err => {
   if (err) throw new Error(err);
   console.log("サーバーを起動しました", `http://localhost:${port}`);
 });
-
 app.use(bodyParser.json());
 
 app.post("/api/link", (req, res) => {
@@ -84,6 +84,17 @@ app.put("/api/editItem", (req, res) => {
   );
 });
 
+app.get("/api/users", (req, res) => {
+  users.find({}).exec((err, data) => {
+    if (err) {
+      sendJSON(res, false, { logs: [], msg: err });
+      return;
+    }
+    console.log("データを送信しました\n", data);
+    sendJSON(res, true, { logs: data });
+  });
+});
+
 app.post("/api/user/registration", (req, res) => {
   const q = req.body;
   if (!q) {
@@ -94,7 +105,7 @@ app.post("/api/user/registration", (req, res) => {
     {
       name: q.name,
       email: q.email,
-      password: q.password,
+      password: bcrypt.hashSync(q.password, saltRounds),
       createTime: new Date().getTime()
     },
     (err, doc) => {
@@ -107,17 +118,6 @@ app.post("/api/user/registration", (req, res) => {
       sendJSON(res, true, { id: doc._id }); // idをなぜ返しているの？
     }
   );
-});
-
-app.get("/api/users", (req, res) => {
-  users.find({}).exec((err, data) => {
-    if (err) {
-      sendJSON(res, false, { logs: [], msg: err });
-      return;
-    }
-    console.log("データを送信しました\n", data);
-    sendJSON(res, true, { logs: data });
-  });
 });
 
 function sendJSON(res, result, obj) {
