@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import "./reset.css";
+import noMatch from "./noMatch.js";
 
 import Header from "./components/Header";
 import App from "./components/App";
@@ -21,6 +22,7 @@ const Application = () => (
       <Route path="/user/registrations" component={CreateUser} />
       <Route path="/user/login" component={Login} />
       <Route path="/user/index" component={Users} />
+      <Route component={noMatch} />
     </Switch>
   </Router>
 );
