@@ -6,11 +6,11 @@ import "./reset.css";
 import noMatch from "./noMatch.js";
 
 import Header from "./components/Header";
-import App from "./components/App";
-import TopPage from "./components/TopPage";
-import CreateUser from "./components/CreateUser";
-import Login from "./components/Login";
-import Users from "./components/Users";
+import App from "./mainPage/PostCard";
+import TopPage from "./mainPage/TopPage";
+import CreateUser from "./mainPage/CreateUser";
+import Login from "./mainPage/Login";
+import Users from "./mainPage/Users";
 import * as serviceWorker from "./serviceWorker";
 
 const Application = () => (

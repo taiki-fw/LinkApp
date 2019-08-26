@@ -1,5 +1,5 @@
 import React from "react";
-import { withRouter } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import request from "superagent";
 
 class CreateUser extends React.Component {
@@ -100,6 +100,10 @@ class CreateUser extends React.Component {
           </label>
           <input type="submit" value="登録" />
         </form>
+        <p>
+          アカウントをお持ちの場合
+          <Link to="/user/login">ログイン</Link>
+        </p>
       </>
     );
   }

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import request from "superagent";
 
 export default class Login extends React.Component {
@@ -70,6 +71,10 @@ export default class Login extends React.Component {
           </label>
           <input type="submit" value="Login" />
         </form>
+        <p>
+          アカウントをお持ちでない方はこちら>>
+          <Link to="/user/registrations">アカウント作成</Link>
+        </p>
       </>
     );
   }

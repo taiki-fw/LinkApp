@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import CardList from "./CardList";
+import CardList from "../components/CardList";
 
 const TopPage = () => {
   return (
