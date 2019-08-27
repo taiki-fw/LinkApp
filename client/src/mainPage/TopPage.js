@@ -20,10 +20,6 @@ class TopPage extends React.Component {
   render() {
     return (
       <>
-        <h1>タイトル</h1>
-        <Link to="/post" style={styles.Link}>
-          投稿
-        </Link>
         <CardList />
       </>
     );
