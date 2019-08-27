@@ -69,15 +69,12 @@ app.get("/api/getItems", (req, res) => {
       sendJSON(res, false, { logs: [], msg: err });
       return;
     }
-    console.log("データを送信しました\n", data);
     sendJSON(res, true, { logs: data });
   });
 });
 
 app.put("/api/editItem", (req, res) => {
   const q = req.body;
-  console.log(q, "送信されました");
-  console.log("送信されていません");
   db.update(
     { _id: q.id },
     {
@@ -94,7 +91,6 @@ app.put("/api/editItem", (req, res) => {
         sendJSON(res, false, { msg: err });
         return;
       }
-      console.info(numReplaced, "個のデータが変更されました");
     }
   );
 });
@@ -141,20 +137,30 @@ app.post("/api/user/login", (req, res) => {
     console.log("データが空です", q);
     return;
   }
-  users.find(
-    {
-      email: q.email,
-      password: bcrypt.hashSync(q.password, saltRounds)
-    },
-    (err, doc) => {
+  users
+    .find({
+      email: q.email
+    })
+    .exec((err, data) => {
       if (err) {
         console.error(err);
         return;
       }
-      req.session.user_id = doc.name;
-      sendJSON(res, true, { msg: "userの認証に成功しました" });
-    }
-  );
+      if (bcrypt.compareSync(q.password, data[0].password)) {
+        req.session.user_id = data[0].name;
+        console.log(req.session);
+        sendJSON(res, true, { msg: "userの認証に成功しました" });
+      }
+    });
+});
+
+app.get("/api/user/auth", (req, res) => {
+  console.log(req.session);
+  if (req.session.user_id) {
+    sendJSON(res, true, { auth: true, msg: "認証完了" });
+  } else {
+    sendJSON(res, false, { auth: false, msg: "認証失敗" });
+  }
 });
 
 function sendJSON(res, result, obj) {

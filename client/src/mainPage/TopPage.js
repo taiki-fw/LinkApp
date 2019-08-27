@@ -6,21 +6,17 @@ import CardList from "../components/CardList";
 
 class TopPage extends React.Component {
   componentWillMount() {
-    const sendObj = this.authUser();
-    if (sendObj.auth) {
-      window.alert(sendObj.msg);
-    } else {
-      this.props.history.push("/login");
-    }
-  }
-
-  authUser() {
-    request.get("/api/user/auth").end((err, obj) => {
+    request.get("/api/user/auth").end((err, data) => {
       if (err) {
         console.error(err);
         return;
       }
-      return obj;
+      if (data.body.auth) {
+        window.alert(data.body.msg);
+      } else {
+        window.alert(data.body.msg);
+        this.props.history.push("/user/login");
+      }
     });
   }
 
