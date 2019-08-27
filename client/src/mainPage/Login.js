@@ -1,4 +1,6 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import request from "superagent";
 
 export default class Login extends React.Component {
   constructor(props) {
@@ -15,11 +17,36 @@ export default class Login extends React.Component {
       [key]: newValue
     });
   }
+
+  Submit(e) {
+    e.preventDefault();
+    this.login();
+  }
+
+  login() {
+    request
+      .post("/api/user/login")
+      .send({
+        email: this.state.email,
+        password: this.state.password
+      })
+      .end((err, res) => {
+        if (err) {
+          console.log(err);
+          return;
+        }
+        if (res) {
+          window.alert(res.body.msg);
+          this.props.history.push("/");
+        }
+      });
+  }
+
   render() {
     return (
       <>
         <h1>Welcome Home</h1>
-        <form>
+        <form onSubmit={e => this.Submit(e)}>
           <label>
             メールアドレス
             <br />
@@ -44,6 +71,10 @@ export default class Login extends React.Component {
           </label>
           <input type="submit" value="Login" />
         </form>
+        <p>
+          アカウントをお持ちでない方はこちら>>
+          <Link to="/user/registrations">アカウント作成</Link>
+        </p>
       </>
     );
   }

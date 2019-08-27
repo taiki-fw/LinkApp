@@ -1,21 +1,51 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import request from "superagent";
+import { withRouter, Link } from "react-router-dom";
 
-const Header = () => {
-  return (
-    <header style={style.header}>
-      <h1>
-        <Link to="/" style={style.link}>
-          LinkApp
-        </Link>
-      </h1>
-      <Link to="/post" style={style.link}>
-        新規投稿
-      </Link>
-      {/* <Link to="">ログアウト</Link> */}
-    </header>
-  );
-};
+class Header extends React.Component {
+  logout() {
+    request.get("/api/logout").end((err, data) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+    });
+  }
+
+  render() {
+    let userFunc;
+    if (this.props.location.pathname === "/") {
+      userFunc = (
+        <div>
+          <Link to="/post" style={style.link}>
+            新規投稿
+          </Link>
+          <button
+            onClick={() => {
+              this.logout();
+              this.props.history.push("/user/login");
+            }}
+            style={style.button}
+          >
+            ログアウト
+          </button>
+        </div>
+      );
+    } else {
+      userFunc = "";
+    }
+    return (
+      <header style={style.header}>
+        <h1>
+          <Link to="/" style={style.link}>
+            LinkApp
+          </Link>
+        </h1>
+        {userFunc}
+      </header>
+    );
+  }
+}
 
 const style = {
   header: {
@@ -26,9 +56,19 @@ const style = {
     alignItems: "center",
     padding: "1em"
   },
+  button: {
+    backgroundColor: "transparent",
+    color: "#fff",
+    fontSize: "16px",
+    fontFamily: "Hiragino Kaku Gothic ProN",
+    border: "none",
+    padding: "0",
+    cursor: "pointer"
+  },
   link: {
-    color: "#fff"
+    color: "#fff",
+    marginRight: "1em"
   }
 };
 
-export default Header;
+export default withRouter(Header);

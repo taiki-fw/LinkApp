@@ -3,13 +3,14 @@ import ReactDOM from "react-dom";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import "./reset.css";
+import noMatch from "./noMatch.js";
 
 import Header from "./components/Header";
-import App from "./components/App";
-import TopPage from "./components/TopPage";
-import CreateUser from "./components/CreateUser";
-import Login from "./components/Login";
-import Users from "./components/Users";
+import App from "./mainPage/PostCard";
+import TopPage from "./mainPage/TopPage";
+import CreateUser from "./mainPage/CreateUser";
+import Login from "./mainPage/Login";
+import Users from "./mainPage/Users";
 import * as serviceWorker from "./serviceWorker";
 
 const Application = () => (
@@ -21,6 +22,7 @@ const Application = () => (
       <Route path="/user/registrations" component={CreateUser} />
       <Route path="/user/login" component={Login} />
       <Route path="/user/index" component={Users} />
+      <Route component={noMatch} />
     </Switch>
   </Router>
 );

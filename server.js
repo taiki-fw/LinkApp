@@ -7,9 +7,17 @@ const users = new NeDB({
   filename: __dirname + "/DB/users.db",
   autoload: true
 });
+users.ensureIndex({ fieldName: "email", unique: true }, err => {
+  if (err) {
+    console.error(err);
+    return;
+  }
+});
 
 const bcrypt = require("bcrypt");
 const saltRounds = 10; //ストレッチング回数
+
+const session = require("express-session");
 
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -20,6 +28,13 @@ app.listen(port, err => {
   console.log("サーバーを起動しました", `http://localhost:${port}`);
 });
 app.use(bodyParser.json());
+app.use(
+  session({
+    secret: "keyboard cat",
+    resave: false,
+    saveUninitialized: true
+  })
+);
 
 app.post("/api/link", (req, res) => {
   const q = req.body;
@@ -54,15 +69,12 @@ app.get("/api/getItems", (req, res) => {
       sendJSON(res, false, { logs: [], msg: err });
       return;
     }
-    console.log("データを送信しました\n", data);
     sendJSON(res, true, { logs: data });
   });
 });
 
 app.put("/api/editItem", (req, res) => {
   const q = req.body;
-  console.log(q, "送信されました");
-  console.log("送信されていません");
   db.update(
     { _id: q.id },
     {
@@ -79,7 +91,6 @@ app.put("/api/editItem", (req, res) => {
         sendJSON(res, false, { msg: err });
         return;
       }
-      console.info(numReplaced, "個のデータが変更されました");
     }
   );
 });
@@ -118,6 +129,45 @@ app.post("/api/user/registration", (req, res) => {
       sendJSON(res, true, { id: doc._id }); // idをなぜ返しているの？
     }
   );
+});
+
+app.post("/api/user/login", (req, res) => {
+  const q = req.body;
+  if (!q) {
+    console.log("データが空です", q);
+    return;
+  }
+  users
+    .find({
+      email: q.email
+    })
+    .exec((err, data) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+      if (bcrypt.compareSync(q.password, data[0].password)) {
+        req.session.user_id = data[0].name;
+        console.log(req.session);
+        sendJSON(res, true, { msg: "userの認証に成功しました" });
+      }
+    });
+});
+
+app.get("/api/logout", (req, res) => {
+  console.log(req.session);
+  req.session.destroy();
+  console.log(req.session);
+  sendJSON(res, true, { msg: "ログアウト" });
+});
+
+app.get("/api/user/auth", (req, res) => {
+  console.log(req.session);
+  if (req.session.user_id) {
+    sendJSON(res, true, { auth: true, msg: "認証完了" });
+  } else {
+    sendJSON(res, false, { auth: false, msg: "認証失敗" });
+  }
 });
 
 function sendJSON(res, result, obj) {
