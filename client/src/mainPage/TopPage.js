@@ -11,10 +11,7 @@ class TopPage extends React.Component {
         console.error(err);
         return;
       }
-      if (data.body.auth) {
-        window.alert(data.body.msg);
-      } else {
-        window.alert(data.body.msg);
+      if (!data.body.auth) {
         this.props.history.push("/user/login");
       }
     });

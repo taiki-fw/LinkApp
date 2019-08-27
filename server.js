@@ -154,6 +154,13 @@ app.post("/api/user/login", (req, res) => {
     });
 });
 
+app.get("/api/logout", (req, res) => {
+  console.log(req.session);
+  req.session.destroy();
+  console.log(req.session);
+  sendJSON(res, true, { msg: "ログアウト" });
+});
+
 app.get("/api/user/auth", (req, res) => {
   console.log(req.session);
   if (req.session.user_id) {
