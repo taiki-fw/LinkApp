@@ -14,7 +14,10 @@ class Header extends React.Component {
 
   render() {
     let userFunc;
-    if (this.props.location.pathname === "/") {
+    if (
+      this.props.location.pathname !== "/user/registrations" &&
+      this.props.location.pathname !== "/user/login"
+    ) {
       userFunc = (
         <div>
           <Link to="/post" style={style.link}>
