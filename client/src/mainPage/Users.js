@@ -20,7 +20,8 @@ export default class Users extends React.Component {
   }
 
   render() {
-    const userList = this.state.users.map(u => <li key={u._id}>{u.name}</li>);
+    let no = 0;
+    const userList = this.state.users.map(u => <li key={no++}>{u.userid}</li>);
     return <ul>{userList}</ul>;
   }
 }

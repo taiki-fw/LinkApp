@@ -14,6 +14,8 @@ users.ensureIndex({ fieldName: "email", unique: true }, err => {
   }
 });
 
+const postgres = require("./DB/db.js");
+
 const bcrypt = require("bcrypt");
 const saltRounds = 10; //ストレッチング回数
 
@@ -96,13 +98,23 @@ app.put("/api/editItem", (req, res) => {
 });
 
 app.get("/api/users", (req, res) => {
-  users.find({}).exec((err, data) => {
-    if (err) {
-      sendJSON(res, false, { logs: [], msg: err });
-      return;
+  // users.find({}).exec((err, data) => {
+  //   if (err) {
+  //     sendJSON(res, false, { logs: [], msg: err });
+  //     return;
+  //   }
+  //   console.log("データを送信しました\n", data);
+  //   sendJSON(res, true, { logs: data });
+  // });
+  postgres.pool.query("SELECT * FROM users").then(result => {
+    console.log("Success\n", result); //SQL文が成功してDBから返却された値result
+    // 結果データの表示
+    if (result.rows) {
+      sendJSON(res, true, { logs: result.rows });
+      result.rows.forEach((row, index) => {
+        console.log(index + 1, row); // rowはobjectとして返却されているの
+      });
     }
-    console.log("データを送信しました\n", data);
-    sendJSON(res, true, { logs: data });
   });
 });
 
