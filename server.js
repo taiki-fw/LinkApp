@@ -124,23 +124,40 @@ app.post("/api/user/registration", (req, res) => {
     console.error("データが空です", q);
     return;
   }
-  users.insert(
-    {
-      name: q.name,
-      email: q.email,
-      password: bcrypt.hashSync(q.password, saltRounds),
-      createTime: new Date().getTime()
-    },
-    (err, doc) => {
-      if (err) {
-        console.error(err);
-        sendJSON(res, false, { msg: err });
-        return;
+  const name = q.name;
+  const email = q.email;
+  const password = bcrypt.hashSync(q.password, saltRounds);
+  const qstr =
+    "insert into users (userid, email, password) values($1, $2, $3);";
+  postgres.pool
+    .query(qstr, [name, email, password])
+    .then(result => {
+      console.log("Success\n", result);
+      if (result.rows) {
+        console.log(result.rows);
+        sendJSON(res, true, {});
       }
-      console.info("ユーザーデータ作成成功！\n", doc);
-      sendJSON(res, true, { id: doc._id }); // idをなぜ返しているの？
-    }
-  );
+    })
+    .catch(error => {
+      console.error(error);
+    });
+  // users.insert(
+  //   {
+  //     name: q.name,
+  //     email: q.email,
+  //     password: bcrypt.hashSync(q.password, saltRounds),
+  //     createTime: new Date().getTime()
+  //   },
+  //   (err, doc) => {
+  //     if (err) {
+  //       console.error(err);
+  //       sendJSON(res, false, { msg: err });
+  //       return;
+  //     }
+  //     console.info("ユーザーデータ作成成功！\n", doc);
+  //     sendJSON(res, true, { id: doc._id }); // idをなぜ返しているの？
+  //   }
+  // );
 });
 
 app.post("/api/user/login", (req, res) => {
