@@ -14,7 +14,7 @@ users.ensureIndex({ fieldName: "email", unique: true }, err => {
   }
 });
 
-const postgres = require("./DB/db.js");
+const postgres = require("./DB/db.js").pool;
 
 const bcrypt = require("bcrypt");
 const saltRounds = 10; //ストレッチング回数
@@ -106,7 +106,7 @@ app.get("/api/users", (req, res) => {
   //   console.log("データを送信しました\n", data);
   //   sendJSON(res, true, { logs: data });
   // });
-  postgres.pool.query("SELECT * FROM users").then(result => {
+  postgres.query("SELECT * FROM users").then(result => {
     console.log("Success\n", result); //SQL文が成功してDBから返却された値result
     // 結果データの表示
     if (result.rows) {
@@ -166,21 +166,36 @@ app.post("/api/user/login", (req, res) => {
     console.log("データが空です", q);
     return;
   }
-  users
-    .find({
-      email: q.email
-    })
-    .exec((err, data) => {
-      if (err) {
-        console.error(err);
-        return;
-      }
-      if (bcrypt.compareSync(q.password, data[0].password)) {
-        req.session.user_id = data[0].name;
-        console.log(req.session);
+  const qstr = "SELECT * FROM users WHERE email = $1";
+  postgres
+    .query(qstr, [q.email])
+    .then(result => {
+      console.log(result);
+      const account = result.rows[0];
+      if (bcrypt.compareSync(q.password, account.password)) {
+        req.session.user_id = account.userid;
         sendJSON(res, true, { msg: "userの認証に成功しました" });
       }
+    })
+    .catch(err => {
+      console.error(err);
+      sendJSON(res, false, { msg: "userの認証に失敗しました" });
     });
+  // users
+  //   .find({
+  //     email: q.email
+  //   })
+  //   .exec((err, data) => {
+  //     if (err) {
+  //       console.error(err);
+  //       return;
+  //     }
+  //     if (bcrypt.compareSync(q.password, data[0].password)) {
+  //       req.session.user_id = data[0].name;
+  //       console.log(req.session);
+  //       sendJSON(res, true, { msg: "userの認証に成功しました" });
+  //     }
+  //   });
 });
 
 app.get("/api/logout", (req, res) => {
