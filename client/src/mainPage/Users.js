@@ -21,7 +21,12 @@ export default class Users extends React.Component {
 
   render() {
     let no = 0;
-    const userList = this.state.users.map(u => <li key={no++}>{u.userid}</li>);
+    const userList = this.state.users.map(u => (
+      <li key={no++}>
+        {u.userid}
+        <span style={{ marginLeft: "1em" }}>{u.email}</span>
+      </li>
+    ));
     return <ul>{userList}</ul>;
   }
 }

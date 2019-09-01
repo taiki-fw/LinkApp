@@ -106,13 +106,24 @@ app.post("/api/link", (req, res) => {
 });
 
 app.get("/api/getItems", (req, res) => {
-  db.find({}).exec((err, data) => {
-    if (err) {
+  const qstr = "SELECT * FROM cards where user_id = $1";
+  postgres
+    .query(qstr, [req.session.user_id])
+    .then(result => {
+      console.log(result.rows);
+      sendJSON(res, true, { logs: result.rows });
+    })
+    .catch(err => {
+      console.error(err);
       sendJSON(res, false, { logs: [], msg: err });
-      return;
-    }
-    sendJSON(res, true, { logs: data });
-  });
+    });
+  // db.find({}).exec((err, data) => {
+  //   if (err) {
+  //     sendJSON(res, false, { logs: [], msg: err });
+  //     return;
+  //   }
+  //   sendJSON(res, true, { logs: data });
+  // });
 });
 
 app.put("/api/editItem", (req, res) => {
@@ -146,16 +157,14 @@ app.get("/api/users", (req, res) => {
   //   console.log("データを送信しました\n", data);
   //   sendJSON(res, true, { logs: data });
   // });
-  postgres.query("SELECT * FROM users").then(result => {
-    console.log("Success\n", result); //SQL文が成功してDBから返却された値result
-    // 結果データの表示
-    if (result.rows) {
+  postgres
+    .query("SELECT * FROM users")
+    .then(result => {
       sendJSON(res, true, { logs: result.rows });
-      result.rows.forEach((row, index) => {
-        console.log(index + 1, row); // rowはobjectとして返却されているの
-      });
-    }
-  });
+    })
+    .catch(err => {
+      sendJSON(res, false, { logs: [] });
+    });
 });
 
 app.post("/api/user/registration", (req, res) => {
@@ -169,7 +178,7 @@ app.post("/api/user/registration", (req, res) => {
   const password = bcrypt.hashSync(q.password, saltRounds);
   const qstr =
     "insert into users (userid, email, password) values($1, $2, $3);";
-  postgres.pool
+  postgres
     .query(qstr, [name, email, password])
     .then(result => {
       console.log("Success\n", result);

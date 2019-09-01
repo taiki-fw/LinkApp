@@ -37,13 +37,13 @@ export default class CardList extends React.Component {
     const IndexOfFirstItem = IndexOfLastItem - this.state.itemPerPage;
 
     const limitCard = this.state.items
-      .sort((p, n) => -(p.createTime - n.createTime))
+      .sort((p, n) => -(p.created_at - n.created_at))
       .slice(IndexOfFirstItem, IndexOfLastItem);
 
     const CardList = limitCard.map(i => (
       <Card
-        key={i._id}
-        id={i._id}
+        key={i.id}
+        id={i.id}
         title={i.title}
         comment={i.comment}
         url={i.url}
