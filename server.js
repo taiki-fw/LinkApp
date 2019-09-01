@@ -14,7 +14,7 @@ users.ensureIndex({ fieldName: "email", unique: true }, err => {
   }
 });
 
-const postgres = require("./DB/db.js").pool;
+const postgre = require("./DB/db.js").pool;
 
 // パスワードの暗号化
 const bcrypt = require("bcrypt");
@@ -69,7 +69,7 @@ app.post("/api/link", (req, res) => {
   const updated_at = create_at;
   const qstr =
     "INSERT INTO cards (user_id, title, comment, url, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6)";
-  postgres
+  postgre
     .query(qstr, [
       req.session.user_id,
       title,
@@ -107,10 +107,10 @@ app.post("/api/link", (req, res) => {
 
 app.get("/api/getItems", (req, res) => {
   const qstr = "SELECT * FROM cards where user_id = $1";
-  postgres
+  postgre
     .query(qstr, [req.session.user_id])
     .then(result => {
-      console.log(result.rows);
+      console.log("以下のLinkデータを送信します\n", result.rows);
       sendJSON(res, true, { logs: result.rows });
     })
     .catch(err => {
@@ -128,24 +128,37 @@ app.get("/api/getItems", (req, res) => {
 
 app.put("/api/editItem", (req, res) => {
   const q = req.body;
-  db.update(
-    { _id: q.id },
-    {
-      $set: {
-        title: q.title,
-        comment: q.comment,
-        url: q.url
-      }
-    },
-    {},
-    (err, numReplaced) => {
-      if (err) {
-        console.error(err);
-        sendJSON(res, false, { msg: err });
-        return;
-      }
-    }
-  );
+  const title = q.title;
+  const comment = q.comment;
+  const url = q.url;
+  const qstr =
+    "UPDATE cards SET title = $1, comment = $2, url = $3 WHERE id = $4 ";
+  postgre
+    .query(qstr, [title, comment, url, q.id])
+    .then(result => {
+      console.log("更新完了\n", result);
+    })
+    .catch(err => {
+      console.error(err);
+    });
+  // db.update(
+  //   { _id: q.id },
+  //   {
+  //     $set: {
+  //       title: q.title,
+  //       comment: q.comment,
+  //       url: q.url
+  //     }
+  //   },
+  //   {},
+  //   (err, numReplaced) => {
+  //     if (err) {
+  //       console.error(err);
+  //       sendJSON(res, false, { msg: err });
+  //       return;
+  //     }
+  //   }
+  // );
 });
 
 app.get("/api/users", (req, res) => {
@@ -157,7 +170,7 @@ app.get("/api/users", (req, res) => {
   //   console.log("データを送信しました\n", data);
   //   sendJSON(res, true, { logs: data });
   // });
-  postgres
+  postgre
     .query("SELECT * FROM users")
     .then(result => {
       sendJSON(res, true, { logs: result.rows });
@@ -178,7 +191,7 @@ app.post("/api/user/registration", (req, res) => {
   const password = bcrypt.hashSync(q.password, saltRounds);
   const qstr =
     "insert into users (userid, email, password) values($1, $2, $3);";
-  postgres
+  postgre
     .query(qstr, [name, email, password])
     .then(result => {
       console.log("Success\n", result);
@@ -216,7 +229,7 @@ app.post("/api/user/login", (req, res) => {
     return;
   }
   const qstr = "SELECT * FROM users WHERE email = $1";
-  postgres
+  postgre
     .query(qstr, [q.email])
     .then(result => {
       console.log(result);

@@ -38,14 +38,19 @@ class Card extends React.Component {
           }
         });
       this.setState({ completed: !this.state.completed });
-      this.props.getLinkData();
     }
   }
 
   render() {
     const actionText = this.state.completed ? "編集" : "完了";
     const actionBtn = (
-      <button style={styles.button} onClick={() => this.handleClick()}>
+      <button
+        style={styles.button}
+        onClick={() => {
+          this.handleClick();
+          this.props.getLinkData();
+        }}
+      >
         {actionText}
       </button>
     );
@@ -53,11 +58,11 @@ class Card extends React.Component {
       <>
         {this.state.completed ? (
           <li style={styles.li}>
-            <a href={this.state.url} style={styles.a}>
+            <a href={this.state.url} style={styles.a} target="_blank">
               <h3>{this.state.title}</h3>
               <p>{this.state.comment}</p>
-              {actionBtn}
             </a>
+            {actionBtn}
           </li>
         ) : (
           <li style={styles.li}>
@@ -90,14 +95,14 @@ class Card extends React.Component {
 // とりあえずのスタイル
 const styles = {
   li: {
+    position: "relative",
+    zIndex: "1",
     backgroundColor: "#EDF0F2",
     padding: "1em",
     margin: "0.5em",
     width: "25%"
   },
   a: {
-    position: "relative",
-    zIndex: "1",
     display: "block",
     textDecoration: "none",
     color: "#0D3F67"
@@ -105,8 +110,12 @@ const styles = {
   button: {
     position: "absolute",
     zIndex: "2",
-    right: "0",
-    top: "0"
+    left: "0",
+    bottom: "-2em",
+    border: "none",
+    padding: 0,
+    color: "#0D3F67"
+    // backgroundColor: "transparent"
   }
 };
 
