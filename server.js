@@ -16,11 +16,11 @@ users.ensureIndex({ fieldName: "email", unique: true }, err => {
 
 const postgres = require("./DB/db.js").pool;
 
+// パスワードの暗号化
 const bcrypt = require("bcrypt");
 const saltRounds = 10; //ストレッチング回数
 
-const session = require("express-session");
-
+// API
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
@@ -30,6 +30,8 @@ app.listen(port, err => {
   console.log("サーバーを起動しました", `http://localhost:${port}`);
 });
 app.use(bodyParser.json());
+// セッション
+const session = require("express-session");
 app.use(
   session({
     secret: "keyboard cat",
@@ -37,6 +39,20 @@ app.use(
     saveUninitialized: true
   })
 );
+
+// 時刻を日付に変更する関数
+function get_date(_timestamp) {
+  var _d = _timestamp ? new Date(_timestamp * 1000) : new Date();
+
+  var Y = _d.getFullYear();
+  var m = ("0" + (_d.getMonth() + 1)).slice(-2);
+  var d = ("0" + _d.getDate()).slice(-2);
+  var H = ("0" + _d.getHours()).slice(-2);
+  var i = ("0" + _d.getMinutes()).slice(-2);
+  var s = ("0" + _d.getSeconds()).slice(-2);
+
+  return Y + "/" + m + "/" + d + " " + H + ":" + i + ":" + s;
+}
 
 app.post("/api/link", (req, res) => {
   const q = req.body;
@@ -46,23 +62,47 @@ app.post("/api/link", (req, res) => {
     console.error("送信されたデータはありません");
     return;
   }
-  db.insert(
-    {
-      title: q.title,
-      comment: q.comment,
-      url: q.url,
-      createTime: new Date().getTime()
-    },
-    (err, doc) => {
-      if (err) {
-        console.error(err);
-        sendJSON(res, false, { msg: err });
-        return;
-      }
-      console.info("データ作成成功！\n", doc);
-      sendJSON(res, true, { id: doc._id }); // idをなぜ返しているの？
-    }
-  );
+  const title = q.title;
+  const comment = q.comment;
+  const url = q.url;
+  const create_at = get_date();
+  const updated_at = create_at;
+  const qstr =
+    "INSERT INTO cards (user_id, title, comment, url, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6)";
+  postgres
+    .query(qstr, [
+      req.session.user_id,
+      title,
+      comment,
+      url,
+      create_at,
+      updated_at
+    ])
+    .then(result => {
+      console.info("データ作成成功！\n", result);
+      sendJSON(res, true, { msg: "投稿に成功しました" });
+    })
+    .catch(err => {
+      console.error(err);
+      sendJSON(res, false, { msg: "投稿に失敗しました" });
+    });
+  // db.insert(
+  //   {
+  //     title: q.title,
+  //     comment: q.comment,
+  //     url: q.url,
+  //     createTime: new Date().getTime()
+  //   },
+  //   (err, doc) => {
+  //     if (err) {
+  //       console.error(err);
+  //       sendJSON(res, false, { msg: err });
+  //       return;
+  //     }
+  //     console.info("データ作成成功！\n", doc);
+  //     sendJSON(res, true, { id: doc._id }); // idをなぜ返しているの？
+  //   }
+  // );
 });
 
 app.get("/api/getItems", (req, res) => {
