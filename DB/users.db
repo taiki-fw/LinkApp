@@ -1,3 +1,4 @@
 {"name":"ログインテスト","email":"login@login.com","password":"$2b$10$YomCKOLB76xqnGVBf9mizunO4MOCaZdVgPTlzMIXEfYKHtaU42eue","createTime":1566665447722,"_id":"0ayRCv2fmACbNNMd"}
 {"name":"データベース","email":"test@test.com","password":"$2b$10$zAaXD.cz/y3TkGONtH.5O.NYrsCKLy55/yJkWX/o3Opj2JEGB2ug6","createTime":1566654438934,"_id":"o70gaAcKJ51U9yak"}
+{"name":"postgreテスト","email":"postgres@test.com","password":"$2b$10$HePcZZhxh0twcTqSexVp3.3AB2N45RHz4pX3JA/Vt6RokXXb3HtYK","createTime":1567063299787,"_id":"yrIEt0xkA01GK7Kn"}
 {"$$indexCreated":{"fieldName":"email","unique":true,"sparse":false}}

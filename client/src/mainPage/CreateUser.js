@@ -39,17 +39,11 @@ class CreateUser extends React.Component {
           window.alert(err);
           return;
         }
-        if (res.body.msg.errorType) {
-          switch (
-            res.body.msg.errorType //DBからのerrによるメッセージの作成
-          ) {
-            case "uniqueViolated":
-              this.setState({ errMsg: "既に登録されているメールアドレスです" });
-              return;
-            default:
-          }
+        if (res.body.result) {
+          this.setState({ errMsg: "登録に成功しました" });
+        } else {
+          this.setState({ errMsg: "登録に失敗しました" });
         }
-        console.log(res);
         this.props.history.push("/user/login");
       });
   }
