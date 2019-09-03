@@ -161,6 +161,23 @@ app.put("/api/editItem", (req, res) => {
   // );
 });
 
+app.delete("/api/deleteItem", (req, res) => {
+  const q = req.body;
+  const user_id = req.session.user_id;
+  const card_id = q.id;
+  const qstr = "DELETE FROM cards WHERE user_id = $1 or id = $2";
+  postgre
+    .query(qstr, [user_id, card_id])
+    .then(result => {
+      console.log("データ削除に成功しました\n", result);
+      sendJSON(res, true, { msg: "データ削除しました。" });
+    })
+    .catch(err => {
+      console.error("データ削除に失敗\n", errr);
+      sendJSON(res, false, { msg: "データ削除出来ませんでした。" });
+    });
+});
+
 app.get("/api/users", (req, res) => {
   // users.find({}).exec((err, data) => {
   //   if (err) {

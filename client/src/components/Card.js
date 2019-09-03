@@ -41,18 +41,36 @@ class Card extends React.Component {
     }
   }
 
+  delete() {
+    const id = this.props.id;
+    request
+      .delete("/api/deleteItem")
+      .send({
+        id: id
+      })
+      .end((err, res) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+        window.alert(res.body.msg);
+      });
+  }
+
   render() {
     const actionText = this.state.completed ? "編集" : "完了";
     const actionBtn = (
-      <button
-        style={styles.button}
-        onClick={() => {
-          this.handleClick();
-          this.props.getLinkData();
-        }}
-      >
-        {actionText}
-      </button>
+      <>
+        <button
+          style={styles.button}
+          onClick={() => {
+            this.handleClick();
+            this.props.getLinkData();
+          }}
+        >
+          {actionText}
+        </button>
+      </>
     );
     return (
       <>
@@ -63,6 +81,15 @@ class Card extends React.Component {
               <p>{this.state.comment}</p>
             </a>
             {actionBtn}
+            <button
+              style={styles.buttonD}
+              onClick={() => {
+                this.delete();
+                this.props.getLinkData();
+              }}
+            >
+              削除
+            </button>
           </li>
         ) : (
           <li style={styles.li}>
@@ -115,7 +142,15 @@ const styles = {
     border: "none",
     padding: 0,
     color: "#0D3F67"
-    // backgroundColor: "transparent"
+  },
+  buttonD: {
+    position: "absolute",
+    zIndex: "2",
+    right: "0",
+    bottom: "-2em",
+    border: "none",
+    padding: 0,
+    color: "#0D3F67"
   }
 };
 
