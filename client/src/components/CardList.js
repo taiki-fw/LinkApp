@@ -43,6 +43,20 @@ export default class CardList extends React.Component {
     const IndexOfFirstItem = IndexOfLastItem - this.state.itemPerPage;
 
     const limitCard = this.state.items
+      .filter(i => {
+        const word = this.state.searchWord;
+        if (!word) {
+          return true;
+        } else {
+          let title = i.title.match(word);
+          let comment = i.comment.match(word);
+          if (title || comment) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+      })
       .sort((p, n) => -(p.created_at - n.created_at))
       .slice(IndexOfFirstItem, IndexOfLastItem);
 
@@ -78,7 +92,12 @@ export default class CardList extends React.Component {
 
     return (
       <>
-        <input type="text" onChange={e => this.search(e)} value="" />
+        <input
+          type="text"
+          onChange={e => this.search(e)}
+          value={this.state.searchWord}
+          placeholder="検索"
+        />
         <ul style={styles.ul}>{CardList}</ul>
         <ul style={styles.ul}>{RenderPagenationBtn}</ul>
       </>
