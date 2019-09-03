@@ -9,7 +9,8 @@ export default class CardList extends React.Component {
     this.state = {
       items: [],
       currentPage: 1,
-      itemPerPage: 12
+      itemPerPage: 12,
+      searchWord: ""
     };
   }
 
@@ -25,6 +26,11 @@ export default class CardList extends React.Component {
       }
       this.setState({ items: data.body.logs });
     });
+  }
+
+  search(e) {
+    const word = e.target.value;
+    this.setState({ searchWord: word });
   }
 
   pageNumClick(e) {
@@ -72,6 +78,7 @@ export default class CardList extends React.Component {
 
     return (
       <>
+        <input type="text" onChange={e => this.search(e)} value="" />
         <ul style={styles.ul}>{CardList}</ul>
         <ul style={styles.ul}>{RenderPagenationBtn}</ul>
       </>
