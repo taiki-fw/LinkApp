@@ -131,10 +131,11 @@ app.put("/api/editItem", (req, res) => {
   const title = q.title;
   const comment = q.comment;
   const url = q.url;
+  const updated_at = get_date();
   const qstr =
-    "UPDATE cards SET title = $1, comment = $2, url = $3 WHERE id = $4 ";
+    "UPDATE cards SET title = $1, comment = $2, url = $3, updated_at = $4 WHERE id = $5 ";
   postgre
-    .query(qstr, [title, comment, url, q.id])
+    .query(qstr, [title, comment, url, updated_at, q.id])
     .then(result => {
       console.log("更新完了\n", result);
     })
