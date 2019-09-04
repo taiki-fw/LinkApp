@@ -6,7 +6,7 @@ import "./reset.css";
 import noMatch from "./noMatch.js";
 
 import Header from "./components/Header";
-import App from "./mainPage/PostCard";
+import PostCard from "./mainPage/PostCard";
 import TopPage from "./mainPage/TopPage";
 import CreateUser from "./mainPage/CreateUser";
 import Login from "./mainPage/Login";
@@ -18,7 +18,7 @@ const Application = () => (
     <Header />
     <Switch>
       <Route exact path="/" component={TopPage} />
-      <Route path="/post" component={App} />
+      <Route path="/post" component={PostCard} />
       <Route path="/user/registrations" component={CreateUser} />
       <Route path="/user/login" component={Login} />
       <Route path="/user/index" component={Users} />
