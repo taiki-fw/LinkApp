@@ -165,7 +165,7 @@ app.delete("/api/deleteItem", (req, res) => {
   const q = req.body;
   const user_id = req.session.user_id;
   const card_id = q.id;
-  const qstr = "DELETE FROM cards WHERE user_id = $1 or id = $2";
+  const qstr = "DELETE FROM cards WHERE user_id = $1 and id = $2";
   postgre
     .query(qstr, [user_id, card_id])
     .then(result => {
