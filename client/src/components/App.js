@@ -1,6 +1,7 @@
 import React from "react";
 import { withRouter, Link } from "react-router-dom";
 import request from "superagent";
+import { H3, H5, RowDiv, PostInput, CenterDiv, PostDiv } from './style.js';
 
 class App extends React.Component {
   constructor(props) {
@@ -40,7 +41,8 @@ class App extends React.Component {
   render() {
     const displayStyle = {
       color: 'red',
-      fontSize: '5px'
+      fontSize: '5px',
+      lineHeight: '20px'
     }
     let msgTitle = null
     let msgUrl = null
@@ -104,42 +106,50 @@ class App extends React.Component {
         <Link to="/" style={styles.Link}>
           キャンセル
         </Link>
-        <label>
-          見出し
+        <PostDiv>
+          <label>
+            <H3>新規投稿</H3>
+            <RowDiv>
+            <H5>見出し</H5>
+            {msgTitle}
+            </RowDiv>
+            <PostInput
+              type="text"
+              value={this.state.title}
+              name="title"
+              onChange={e => this.handleChange(e)}
+            />
+          </label>
           <br />
-          {msgTitle}
-          <input
-            type="text"
-            value={this.state.title}
-            name="title"
-            onChange={e => this.handleChange(e)}
-          />
-        </label>
-        <br />
-        <label>
-          コメント
+          <label>
+            <RowDiv>
+            <H5>コメント</H5>
+            </RowDiv>
+            <PostInput
+              type="text"
+              value={this.state.comment}
+              name="comment"
+              onChange={e => this.handleChange(e)}
+            />
+          </label>
           <br />
-          <input
-            type="text"
-            value={this.state.comment}
-            name="comment"
-            onChange={e => this.handleChange(e)}
-          />
-        </label>
+          <label>
+            <RowDiv>
+            <H5>URL</H5>
+            {msgUrl}
+            </RowDiv>
+            <PostInput
+              type="text"
+              value={this.state.url}
+              name="url"
+              onChange={e => this.handleChange(e)}
+            />
+          </label>
         <br />
-        <label>
-          URL
-          <br />
-          {msgUrl}
-          <input
-            type="text"
-            value={this.state.url}
-            name="url"
-            onChange={e => this.handleChange(e)}
-          />
-        </label>
-        <br />
+        <CenterDiv>
         {sendBtn}
+        </CenterDiv>
+        </PostDiv>
         </>
     );
   }
@@ -153,7 +163,8 @@ const styles = {
     backgroundColor: "#fff",
     borderRadius: "5px",
     padding: "0.5em 1.5em 0.5em 0"
-  }
+  },
+
 };
 
 export default withRouter(App);
