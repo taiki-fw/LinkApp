@@ -4,6 +4,12 @@ import request from "superagent";
 
 import Card from "../components/Card";
 
+function get_timestamp(_date) {
+  var _d = _date ? new Date(_date) : new Date();
+
+  return Math.floor(_d.getTime() / 1000);
+}
+
 class TopPage extends React.Component {
   constructor(props) {
     super(props);
@@ -68,7 +74,9 @@ class TopPage extends React.Component {
           }
         }
       })
-      .sort((p, n) => -(p.created_at - n.created_at))
+      .sort((p, n) => {
+        return -(get_timestamp(p.created_at) - get_timestamp(n.created_at));
+      })
       .slice(IndexOfFirstItem, IndexOfLastItem);
 
     const CardList = limitCard.map(i => (
