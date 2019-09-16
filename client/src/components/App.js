@@ -1,7 +1,7 @@
 import React from "react";
 import { withRouter, Link } from "react-router-dom";
 import request from "superagent";
-import { H3, H5, RowDiv, PostInput, CenterDiv, PostDiv } from './style.js';
+import { H3, H2, RowDiv, PostInput, CenterDiv, PostDiv, Button } from './style.js';
 
 class App extends React.Component {
   constructor(props) {
@@ -99,18 +99,16 @@ class App extends React.Component {
       sendDisable = true
     }
 
-    sendBtn = < button id="formBtn" onClick={e => this.post()} disabled={sendDisable} > 送信</button >
+    sendBtn = < Button id="formBtn" onClick={e => this.post()} disabled={sendDisable} > 送信</Button >
   
     return (
       <>
-        <Link to="/" style={styles.Link}>
-          キャンセル
-        </Link>
         <PostDiv>
           <label>
-            <H3>新規投稿</H3>
+            <H2>新規投稿</H2>
+            <CenterDiv>
             <RowDiv>
-            <H5>見出し</H5>
+            <H3>見出し</H3>
             {msgTitle}
             </RowDiv>
             <PostInput
@@ -119,37 +117,45 @@ class App extends React.Component {
               name="title"
               onChange={e => this.handleChange(e)}
             />
+            </CenterDiv>
           </label>
           <br />
           <label>
             <RowDiv>
-            <H5>コメント</H5>
+            <H3>コメント</H3>
             </RowDiv>
+            <CenterDiv>
             <PostInput
               type="text"
               value={this.state.comment}
               name="comment"
               onChange={e => this.handleChange(e)}
             />
+            </CenterDiv>
           </label>
           <br />
           <label>
             <RowDiv>
-            <H5>URL</H5>
+            <H3>URL</H3>
             {msgUrl}
             </RowDiv>
+            <CenterDiv>
             <PostInput
               type="text"
               value={this.state.url}
               name="url"
               onChange={e => this.handleChange(e)}
             />
+            </CenterDiv>
           </label>
         <br />
         <CenterDiv>
         {sendBtn}
         </CenterDiv>
         </PostDiv>
+        <Link to="/" style={styles.Link}>
+          キャンセル
+        </Link>
         </>
     );
   }
@@ -162,7 +168,8 @@ const styles = {
     color: "#0D3F67",
     backgroundColor: "#fff",
     borderRadius: "5px",
-    padding: "0.5em 1.5em 0.5em 0"
+    padding: "0.5em 1.5em 0.5em 0",
+    textAlign: "center"
   },
 
 };
