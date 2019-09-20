@@ -14,7 +14,7 @@ users.ensureIndex({ fieldName: "email", unique: true }, err => {
   }
 });
 
-const postgre = require("./DB/db.js").pool;
+const postgre = require("./db.js/index.js").pool;
 
 // パスワードの暗号化
 const bcrypt = require("bcrypt");
