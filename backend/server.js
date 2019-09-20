@@ -1,19 +1,3 @@
-const NeDB = require("nedb");
-const db = new NeDB({
-  filename: __dirname + "/DB/post.db",
-  autoload: true
-});
-const users = new NeDB({
-  filename: __dirname + "/DB/users.db",
-  autoload: true
-});
-users.ensureIndex({ fieldName: "email", unique: true }, err => {
-  if (err) {
-    console.error(err);
-    return;
-  }
-});
-
 const postgre = require("./db.js/index.js").pool;
 
 // パスワードの暗号化
