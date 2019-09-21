@@ -1,0 +1,15 @@
+version: "3"
+
+volumes:
+  pgdata:
+    driver: "local"
+services:
+  postgres:
+    image: postgres:11.4-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: "link"
+      POSTGRES_PASSWORD: "link"
+    ports: ["5432:5432"]
+    volumes:
+      [./DB/sql:/docker-entrypoint-initdb.d, pgdata:/var/lib/postgresql/data]

@@ -1,9 +1,11 @@
 const pg = require("pg");
 
-const connectionString = "postgres://taiki:80210880@localhost:5432/LinkAppNew";
-
 const pool = new pg.Pool({
-  connectionString: connectionString
+  host: "localhost",
+  port: 5432,
+  database: "link",
+  user: "link",
+  password: "link"
 });
 
 module.exports = {

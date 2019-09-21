@@ -1,4 +1,16 @@
-const postgre = require("./db.js/index.js").pool;
+const postgre = require("./db.js").pool;
+// postgre.connect((err, client, release) => {
+//   if (err) {
+//     return console.error("Error acquiring client", err.stack);
+//   }
+//   client.query("SELECT NOW()", (err, result) => {
+//     release();
+//     if (err) {
+//       return console.error("Error executing query", err.stack);
+//     }
+//     console.log(result.rows);
+//   });
+// });
 
 // パスワードの暗号化
 const bcrypt = require("bcrypt");
