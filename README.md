@@ -11,7 +11,7 @@ collection link from \*
 5. cd /LinkAppNew/backend && yarn start
 6. cd /LinkAppNew/client && yarn start
 
-*this repositry need to install docker environment in your pc*
+**this repositry need to install docker environment in your pc**
 
 ## git rules
 
