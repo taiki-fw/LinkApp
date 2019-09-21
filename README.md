@@ -13,6 +13,10 @@ collection link from \*
 
 **this repositry need to install docker environment in your pc**
 
+## Error
+
+if you didn't create docker container to follow description above , try to halt postgres in your localhost. 
+
 ## git rules
 
 https://www.dropbox.com/s/4ncn4r50mqk3w4r/Git%E3%83%AB%E3%83%BC%E3%83%AB.pdf?dl=0
