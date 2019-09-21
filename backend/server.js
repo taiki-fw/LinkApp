@@ -1,20 +1,16 @@
-const NeDB = require("nedb");
-const db = new NeDB({
-  filename: __dirname + "/DB/post.db",
-  autoload: true
-});
-const users = new NeDB({
-  filename: __dirname + "/DB/users.db",
-  autoload: true
-});
-users.ensureIndex({ fieldName: "email", unique: true }, err => {
-  if (err) {
-    console.error(err);
-    return;
-  }
-});
-
-const postgre = require("./DB/db.js").pool;
+const postgre = require("./db.js").pool;
+// postgre.connect((err, client, release) => {
+//   if (err) {
+//     return console.error("Error acquiring client", err.stack);
+//   }
+//   client.query("SELECT NOW()", (err, result) => {
+//     release();
+//     if (err) {
+//       return console.error("Error executing query", err.stack);
+//     }
+//     console.log(result.rows);
+//   });
+// });
 
 // パスワードの暗号化
 const bcrypt = require("bcrypt");
@@ -86,23 +82,6 @@ app.post("/api/link", (req, res) => {
       console.error(err);
       sendJSON(res, false, { msg: "投稿に失敗しました" });
     });
-  // db.insert(
-  //   {
-  //     title: q.title,
-  //     comment: q.comment,
-  //     url: q.url,
-  //     createTime: new Date().getTime()
-  //   },
-  //   (err, doc) => {
-  //     if (err) {
-  //       console.error(err);
-  //       sendJSON(res, false, { msg: err });
-  //       return;
-  //     }
-  //     console.info("データ作成成功！\n", doc);
-  //     sendJSON(res, true, { id: doc._id }); // idをなぜ返しているの？
-  //   }
-  // );
 });
 
 app.get("/api/getItems", (req, res) => {
@@ -117,13 +96,6 @@ app.get("/api/getItems", (req, res) => {
       console.error(err);
       sendJSON(res, false, { logs: [], msg: err });
     });
-  // db.find({}).exec((err, data) => {
-  //   if (err) {
-  //     sendJSON(res, false, { logs: [], msg: err });
-  //     return;
-  //   }
-  //   sendJSON(res, true, { logs: data });
-  // });
 });
 
 app.put("/api/editItem", (req, res) => {
@@ -142,24 +114,6 @@ app.put("/api/editItem", (req, res) => {
     .catch(err => {
       console.error(err);
     });
-  // db.update(
-  //   { _id: q.id },
-  //   {
-  //     $set: {
-  //       title: q.title,
-  //       comment: q.comment,
-  //       url: q.url
-  //     }
-  //   },
-  //   {},
-  //   (err, numReplaced) => {
-  //     if (err) {
-  //       console.error(err);
-  //       sendJSON(res, false, { msg: err });
-  //       return;
-  //     }
-  //   }
-  // );
 });
 
 app.delete("/api/deleteItem", (req, res) => {
@@ -180,14 +134,6 @@ app.delete("/api/deleteItem", (req, res) => {
 });
 
 app.get("/api/users", (req, res) => {
-  // users.find({}).exec((err, data) => {
-  //   if (err) {
-  //     sendJSON(res, false, { logs: [], msg: err });
-  //     return;
-  //   }
-  //   console.log("データを送信しました\n", data);
-  //   sendJSON(res, true, { logs: data });
-  // });
   postgre
     .query("SELECT * FROM users")
     .then(result => {
@@ -221,23 +167,6 @@ app.post("/api/user/registration", (req, res) => {
     .catch(error => {
       console.error(error);
     });
-  // users.insert(
-  //   {
-  //     name: q.name,
-  //     email: q.email,
-  //     password: bcrypt.hashSync(q.password, saltRounds),
-  //     createTime: new Date().getTime()
-  //   },
-  //   (err, doc) => {
-  //     if (err) {
-  //       console.error(err);
-  //       sendJSON(res, false, { msg: err });
-  //       return;
-  //     }
-  //     console.info("ユーザーデータ作成成功！\n", doc);
-  //     sendJSON(res, true, { id: doc._id }); // idをなぜ返しているの？
-  //   }
-  // );
 });
 
 app.post("/api/user/login", (req, res) => {
@@ -261,21 +190,6 @@ app.post("/api/user/login", (req, res) => {
       console.error(err);
       sendJSON(res, false, { msg: "userの認証に失敗しました" });
     });
-  // users
-  //   .find({
-  //     email: q.email
-  //   })
-  //   .exec((err, data) => {
-  //     if (err) {
-  //       console.error(err);
-  //       return;
-  //     }
-  //     if (bcrypt.compareSync(q.password, data[0].password)) {
-  //       req.session.user_id = data[0].name;
-  //       console.log(req.session);
-  //       sendJSON(res, true, { msg: "userの認証に成功しました" });
-  //     }
-  //   });
 });
 
 app.get("/api/logout", (req, res) => {
