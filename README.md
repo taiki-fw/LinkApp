@@ -4,6 +4,8 @@ collection link from \*
 
 ## Get Started
 
+At first please command `brew services stop postgresql` in your local.
+
 1. clone this repository
 2. cd /LinkAppNew/client && yarn install
 3. cd /LinkAppNew/backend && yarn install
