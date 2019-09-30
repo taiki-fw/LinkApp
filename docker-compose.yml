@@ -8,8 +8,9 @@ services:
     image: postgres:11.4-alpine
     restart: always
     environment:
-      POSTGRES_USER: "link"
-      POSTGRES_PASSWORD: "link"
-    ports: ["5432:5432"]
+      POSTGRES_USER: ${POSTGRE_USER}
+      POSTGRES_PASSWORD: ${POSTGRE_PASSWORD}
+    ports:
+      - ${POSTGRE_PORT}:${POSTGRE_PORT}
     volumes:
       [./DB/sql:/docker-entrypoint-initdb.d, pgdata:/var/lib/postgresql/data]
