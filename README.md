@@ -2,12 +2,20 @@
 
 collection link from \*
 
-## step
+## Get Started
 
-1. clone this repositry
-2. yarn install.then(complete copy enviroment)
-3. /LinkAppNew -　 yarn start => server が立ち上がる
-4. /LinkAppNew/client - yarn start => クライアント側の script がブラウザで立ち上がる
+1. clone this repository
+2. cd /LinkAppNew/client && yarn install
+3. cd /LinkAppNew/backend && yarn install
+4. cd /LinkAppNew && docker-compose up --build -d
+5. cd /LinkAppNew/backend && yarn start
+6. cd /LinkAppNew/client && yarn start
+
+**this repositry need to install docker environment in your pc**
+
+## Error
+
+if you didn't create docker container to follow description above , try to halt postgres in your localhost. 
 
 ## git rules
 
