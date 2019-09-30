@@ -7,11 +7,11 @@ collection link from \*
 At first please command `brew services stop postgresql` in your local.
 
 1. clone this repository
-2. cd /LinkAppNew/client && yarn install
-3. cd /LinkAppNew/backend && yarn install
-4. cd /LinkAppNew && docker-compose up --build -d
-5. cd /LinkAppNew/backend && yarn start
-6. cd /LinkAppNew/client && yarn start
+2. `cd /LinkAppNew/client` && `yarn install`
+3. `cd /LinkAppNew/backend` && `yarn install`
+4. `cd /LinkAppNew` && `docker-compose up --build -d`
+5. `cd /LinkAppNew/backend` && `yarn start`
+6. `cd /LinkAppNew/client` && `yarn start`
 
 **this repositry need to install docker environment in your pc and set db information on .env(if don't exist, please create it)**
 
