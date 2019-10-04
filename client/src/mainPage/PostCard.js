@@ -22,7 +22,7 @@ class PostCard extends React.Component {
 
   post() {
     request
-      .post("/api/link")
+      .post("/api/createLink")
       .send({
         title: this.state.title,
         comment: this.state.comment,
