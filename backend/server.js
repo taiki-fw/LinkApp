@@ -50,21 +50,22 @@ function get_date(_timestamp) {
   return Y + "/" + m + "/" + d + " " + H + ":" + i + ":" + s;
 }
 
-app.post("/api/link", (req, res) => {
+const card_table_name = "link_cards"; // LinkCardのテーブル名
+
+app.post("/api/createLink", (req, res) => {
   const q = req.body;
-  console.log(q);
   if (!q) {
-    // TODO: errorのstatusを送信して、React側でエラーメッセージを送信する
     console.error("送信されたデータはありません");
     return;
   }
+  // const [title, comment, url] = q;
   const title = q.title;
   const comment = q.comment;
   const url = q.url;
   const create_at = get_date();
   const updated_at = create_at;
   const qstr =
-    "INSERT INTO cards (user_id, title, comment, url, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6)";
+    "INSERT INTO link_cards (user_id, title, comment, url, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6)";
   postgre
     .query(qstr, [
       req.session.user_id,
@@ -85,7 +86,7 @@ app.post("/api/link", (req, res) => {
 });
 
 app.get("/api/getItems", (req, res) => {
-  const qstr = "SELECT * FROM cards where user_id = $1";
+  const qstr = "SELECT * FROM link_cards where user_id = $1";
   postgre
     .query(qstr, [req.session.user_id])
     .then(result => {
@@ -100,12 +101,13 @@ app.get("/api/getItems", (req, res) => {
 
 app.put("/api/editItem", (req, res) => {
   const q = req.body;
+  // const [title, comment, url] = q;
   const title = q.title;
   const comment = q.comment;
   const url = q.url;
   const updated_at = get_date();
   const qstr =
-    "UPDATE cards SET title = $1, comment = $2, url = $3, updated_at = $4 WHERE id = $5 ";
+    "UPDATE link_cards SET title = $1, comment = $2, url = $3, updated_at = $4 WHERE id = $5 ";
   postgre
     .query(qstr, [title, comment, url, updated_at, q.id])
     .then(result => {
@@ -120,7 +122,7 @@ app.delete("/api/deleteItem", (req, res) => {
   const q = req.body;
   const user_id = req.session.user_id;
   const card_id = q.id;
-  const qstr = "DELETE FROM cards WHERE user_id = $1 and id = $2";
+  const qstr = "DELETE FROM link_cards WHERE user_id = $1 and id = $2";
   postgre
     .query(qstr, [user_id, card_id])
     .then(result => {
@@ -154,7 +156,7 @@ app.post("/api/user/registration", (req, res) => {
   const email = q.email;
   const password = bcrypt.hashSync(q.password, saltRounds);
   const qstr =
-    "insert into users (userid, email, password) values($1, $2, $3);";
+    "insert into users (user_id, email, password) values($1, $2, $3);";
   postgre
     .query(qstr, [name, email, password])
     .then(result => {
@@ -182,7 +184,7 @@ app.post("/api/user/login", (req, res) => {
       console.log(result);
       const account = result.rows[0];
       if (bcrypt.compareSync(q.password, account.password)) {
-        req.session.user_id = account.userid;
+        req.session.user_id = account.user_id;
         sendJSON(res, true, { msg: "userの認証に成功しました" });
       }
     })
