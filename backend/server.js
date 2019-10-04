@@ -54,11 +54,11 @@ const card_table_name = "link_cards"; // LinkCardのテーブル名
 
 app.post("/api/createLink", (req, res) => {
   const q = req.body;
-  console.log(q);
   if (!q) {
     console.error("送信されたデータはありません");
     return;
   }
+  // const [title, comment, url] = q;
   const title = q.title;
   const comment = q.comment;
   const url = q.url;
@@ -101,6 +101,7 @@ app.get("/api/getItems", (req, res) => {
 
 app.put("/api/editItem", (req, res) => {
   const q = req.body;
+  // const [title, comment, url] = q;
   const title = q.title;
   const comment = q.comment;
   const url = q.url;

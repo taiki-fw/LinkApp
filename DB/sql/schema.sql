@@ -9,5 +9,7 @@ CREATE TABLE link_cards(
   title TEXT NOT NULL,
   comment TEXT,
   url TEXT NOT NULL,
+  created_at TIMESTAMP NOT NULL,
+  updated_at TIMESTAMP NOT NULL,
   user_id TEXT NOT NULL references users(user_id)
 );
