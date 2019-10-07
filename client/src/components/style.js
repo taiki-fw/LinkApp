@@ -1,11 +1,19 @@
 import React from "react";
 import styled from "styled-components"
 
+export const RedP = styled.p`
+ color: red;
+ font-size: 1.1rem;
+ @media (max-width:700px){
+     font-size: 0.9rem;
+ }
+`
+
 export const H3 = styled.h3`
  margin: 0px;
  color: #0D3F67;
  @media (max-width:700px){
-     font-size: 12px;
+     font-size: 0.9rem;
  }
 `
 
@@ -14,7 +22,7 @@ export const H2 = styled.h2`
  margin-bottom: 10px;
  color: #0D3F67;
  @media (max-width:700px){
-     font-size: 16px;
+     font-size: 1.0rem;
  }
 `
 
@@ -26,12 +34,14 @@ export const RowDiv = styled.div`
 
 export const PostInput = styled.input`
  width: 80%;
- height: 4em;
- margin-bottom: 20px;
+ padding: 14px 0;
+ margin-bottom: 10px;
  border-radius: 5px;
+ font-size: 1.1rem;
  @media (max-width:700px){
-    height: 3em;
+    padding: 8px 0;
     margin-bottom: 0;
+    font-size: 0.8rem;
  }
 `
 
@@ -67,5 +77,92 @@ export const Button = styled.button`
      font-weight: normal;
      font-size: 1em;
      padding: 5px 20px;
+ }
+`
+
+export const Li = styled.li`
+ width: 200px;
+ height: 300px;
+ box-shadow: 4px 4px 4px #999;
+ margin: 20px 30px;
+ padding: 1em;
+ transition: 0.2s;
+ background-color: #EDF0F2;
+ display: inline;
+ :hover {
+     box-shadow: 8px 8px 8px #999;
+     transform: scale(1.1);
+     cursor: pointer;
+ }
+ @media(max-width:1040px){
+     margin: 10px 20px;
+ }
+ @media (max-width:700px){
+     width: 100px;
+     height: 150px;
+     margin: 10px 10px;
+     padding: 5px;
+ }
+`
+
+export const CardH3 = styled.h3`
+ color: #0D3F67;
+ text-align: center;
+ margin: 10px;
+ @media (max-width:700px) {
+     font-size: 12px;
+     margin: 5px;
+ }
+`
+
+export const CardP = styled.p`
+ padding: 5px;
+ text-align: left;
+ @media(max-width:700px){
+     font-size: 10px;
+ }
+`
+
+export const PageLi = styled.li`
+ padding: 0.25em 0.5em;
+ margin: 0.1em;
+ border: 1px solid #0D3F67;
+ color: #0D3F67;
+ display: inline;
+ :hover {
+     cursor: pointer;
+     background-color: #0D3F67;
+     color: white;
+ }
+`
+
+export const PageUl = styled.ul`
+ display: flex;
+ flex-wrap: wrap;
+ list-style-type: none;
+ margin: 10px;
+ padding: 0;
+`
+
+export const CardUl = styled.ul`
+ display: flex;
+ flex-wrap: wrap;
+ list-style-type: none;
+ text-align: center;
+ padding: 0;
+ margin-left: 2%;
+`
+
+export const TopH1 = styled.h1`
+ margin: 20px 50px;
+`
+
+export const EditButton = styled.button`
+ position: absolute;
+ z-index: 2;
+ right: 0;
+ bottom: 0;
+ @media (max-width:700px) {
+    font-size: 10px;
  }
 `

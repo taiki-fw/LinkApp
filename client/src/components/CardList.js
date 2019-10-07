@@ -1,7 +1,7 @@
 import React from "react";
 import request from "superagent";
-
 import Card from "./Card";
+import { CardUl, PageUl, PageLi } from './style.js';
 
 export default class CardList extends React.Component {
   constructor(props) {
@@ -60,35 +60,22 @@ export default class CardList extends React.Component {
       PagenationBtn.push(i);
     }
     const RenderPagenationBtn = PagenationBtn.map(n => (
-      <li
+      <PageLi
         key={n}
         id={n}
         onClick={e => this.pageNumClick(e)}
-        style={styles.pageBtn}
       >
         {n}
-      </li>
+      </PageLi>
     ));
 
     return (
       <>
-        <ul style={styles.ul}>{CardList}</ul>
-        <ul style={styles.ul}>{RenderPagenationBtn}</ul>
+        <CardUl>{CardList}</CardUl>
+        <PageUl>{RenderPagenationBtn}</PageUl>
       </>
     );
   }
 }
 
-const styles = {
-  ul: {
-    display: "flex",
-    flexWrap: "wrap",
-    listStyleType: "none"
-  },
-  pageBtn: {
-    padding: "0.25em 0.5em",
-    margin: "0.1em",
-    border: "1px solid blue",
-    color: "blue"
-  }
-};
+

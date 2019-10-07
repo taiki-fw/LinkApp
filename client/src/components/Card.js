@@ -1,5 +1,6 @@
 import React from "react";
 import request from "superagent";
+import { Li, CardH3, CardP, EditButton } from './style.js';
 
 class Card extends React.Component {
   constructor(props) {
@@ -45,20 +46,20 @@ class Card extends React.Component {
   render() {
     const actionText = this.state.completed ? "編集" : "完了";
     const actionBtn = (
-      <button style={styles.button} onClick={() => this.handleClick()}>
+      <EditButton style={styles.button} onClick={() => this.handleClick()}>
         {actionText}
-      </button>
+      </EditButton>
     );
     return (
       <>
         {this.state.completed ? (
-          <li style={styles.li}>
+          <Li style={styles.li}>
             <a href={this.state.url} style={styles.a}>
-              <h3>{this.state.title}</h3>
-              <p>{this.state.comment}</p>
+              <CardH3>{this.state.title}</CardH3>
+              <CardP>{this.state.comment}</CardP>
               {actionBtn}
             </a>
-          </li>
+          </Li>
         ) : (
           <li style={styles.li}>
             <input
@@ -89,12 +90,6 @@ class Card extends React.Component {
 
 // とりあえずのスタイル
 const styles = {
-  li: {
-    backgroundColor: "#EDF0F2",
-    padding: "1em",
-    margin: "0.5em",
-    width: "25%"
-  },
   a: {
     position: "relative",
     zIndex: "1",
@@ -106,7 +101,7 @@ const styles = {
     position: "absolute",
     zIndex: "2",
     right: "0",
-    top: "0"
+    bottom: "0"
   }
 };
 

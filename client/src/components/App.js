@@ -1,7 +1,7 @@
 import React from "react";
 import { withRouter, Link } from "react-router-dom";
 import request from "superagent";
-import { H3, H2, RowDiv, PostInput, CenterDiv, PostDiv, Button } from './style.js';
+import { H3, H2, RowDiv, PostInput, CenterDiv, PostDiv, Button, RedP } from './style.js';
 
 class App extends React.Component {
   constructor(props) {
@@ -39,11 +39,6 @@ class App extends React.Component {
   }
 
   render() {
-    const displayStyle = {
-      color: 'red',
-      fontSize: '5px',
-      lineHeight: '20px'
-    }
     let msgTitle = null
     let msgUrl = null
     let sendDisable = true
@@ -56,13 +51,13 @@ class App extends React.Component {
     let checkUrl = this.state.url.match(/^https?(:\/\/[-_.!~*'()a-zA-Z0-9;/?:@&=+$,%#]+)$/)
 
     if (titleLength > maxLength) {
-      msgTitle = <p style={displayStyle}>*20文字以内</p>
+      msgTitle = <RedP>*20文字以内</RedP>
       sendTitleCheck = "ng"
     } else if (titleLength <= minLength) {
-      msgTitle = <p style={displayStyle}>*必須</p>
+      msgTitle = <RedP>*必須</RedP>
       sendTitleCheck = "ng"
     } else {
-      msgTitle = <p></p>
+      msgTitle = <RedP></RedP>
       sendTitleCheck = "ok"
     }
 
@@ -76,13 +71,13 @@ class App extends React.Component {
     // }
 
     if (this.state.url === ""){
-      msgUrl = <p style={displayStyle}>*必須</p>
+      msgUrl = <RedP>*必須</RedP>
       sendUrlCheck = "ng"
     }else if (checkUrl !== null){
-      msgUrl = <p></p>
+      msgUrl = <RedP></RedP>
       sendUrlCheck = "ok"
     }else {
-      msgUrl = <p style={displayStyle}>リンクを貼ってください</p>
+      msgUrl = <RedP>*リンクを貼ってください</RedP>
       sendUrlCheck = "ng"
     }
 
@@ -168,7 +163,6 @@ const styles = {
     color: "#0D3F67",
     backgroundColor: "#fff",
     borderRadius: "5px",
-    padding: "0.5em 1.5em 0.5em 0",
     textAlign: "center"
   },
 
