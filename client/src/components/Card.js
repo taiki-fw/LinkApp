@@ -54,6 +54,7 @@ class Card extends React.Component {
           return;
         }
         window.alert(res.body.msg);
+        this.props.getLinkData();
       });
   }
 
@@ -81,13 +82,7 @@ class Card extends React.Component {
               <p>{this.state.comment}</p>
             </a>
             {actionBtn}
-            <button
-              style={styles.buttonD}
-              onClick={() => {
-                this.delete();
-                this.props.getLinkData();
-              }}
-            >
+            <button style={styles.buttonD} onClick={() => this.delete()}>
               削除
             </button>
           </li>
