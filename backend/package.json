@@ -4,15 +4,18 @@
   "main": "server.js",
   "license": "MIT",
   "scripts": {
-    "start": "node server.js"
+    "start": "yarn run babel src --out-dir dist & node ./dist/server.js"
   },
   "dependencies": {
     "@babel/preset-env": "^7.5.5",
-    "babel-cli": "^6.26.0",
     "bcrypt": "^3.0.6",
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "express-session": "^1.16.2",
     "pg": "^7.12.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.6.4",
+    "@babel/core": "^7.6.4"
   }
 }
