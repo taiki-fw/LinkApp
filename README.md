@@ -2,14 +2,27 @@
 
 collection link from \*
 
+## skill
+- front-end => react(use create-react-app generator) / react-router / super-agent(send HTTP Request)
+- backend => Node.js(Express) / babel / nodemon / bcrypt 
+- infrastructure　=> docker / postgresql / dotenv
+
+Could you read package.json for details;
+
+## function
+
+- registration ... express session
+- CRUD my link card ... postgres/express api/react
+- routing ... react-router
+- search link card ... react
+
 ## Get Started
 
 At first please command `brew services stop postgresql` in your local.
 
 1. clone this repository
-2. `cd /LinkAppNew/client` && `yarn install`
-3. `cd /LinkAppNew/backend` && `yarn install`
-4. `cd /LinkAppNew` && `docker-compose up --build -d`
+2. `yarn install`
+4. `docker-compose up --build -d`
 5. `cd /LinkAppNew/backend` && `yarn start`
 6. `cd /LinkAppNew/client` && `yarn start`
 
