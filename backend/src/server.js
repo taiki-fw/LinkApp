@@ -1,16 +1,4 @@
 const postgre = require("./db.js").pool;
-// postgre.connect((err, client, release) => {
-//   if (err) {
-//     return console.error("Error acquiring client", err.stack);
-//   }
-//   client.query("SELECT NOW()", (err, result) => {
-//     release();
-//     if (err) {
-//       return console.error("Error executing query", err.stack);
-//     }
-//     console.log(result.rows);
-//   });
-// });
 
 // パスワードの暗号化
 const bcrypt = require("bcrypt");
@@ -54,18 +42,15 @@ const card_table_name = "link_cards"; // LinkCardのテーブル名
 
 app.post("/api/createLink", (req, res) => {
   const q = req.body;
+  console.log(q);
   if (!q) {
     console.error("送信されたデータはありません");
     return;
   }
-  // const [title, comment, url] = q;
-  const title = q.title;
-  const comment = q.comment;
-  const url = q.url;
+  const { title, comment, url } = q;
   const create_at = get_date();
   const updated_at = create_at;
-  const qstr =
-    "INSERT INTO link_cards (user_id, title, comment, url, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6)";
+  const qstr = `INSERT INTO ${card_table_name} (user_id, title, comment, url, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6)`;
   postgre
     .query(qstr, [
       req.session.user_id,
@@ -86,7 +71,7 @@ app.post("/api/createLink", (req, res) => {
 });
 
 app.get("/api/getItems", (req, res) => {
-  const qstr = "SELECT * FROM link_cards where user_id = $1";
+  const qstr = `SELECT * FROM ${card_table_name} where user_id = $1`;
   postgre
     .query(qstr, [req.session.user_id])
     .then(result => {
@@ -101,13 +86,9 @@ app.get("/api/getItems", (req, res) => {
 
 app.put("/api/editItem", (req, res) => {
   const q = req.body;
-  // const [title, comment, url] = q;
-  const title = q.title;
-  const comment = q.comment;
-  const url = q.url;
+  const { title, comment, url } = q;
   const updated_at = get_date();
-  const qstr =
-    "UPDATE link_cards SET title = $1, comment = $2, url = $3, updated_at = $4 WHERE id = $5 ";
+  const qstr = `UPDATE ${card_table_name} SET title = $1, comment = $2, url = $3, updated_at = $4 WHERE id = $5`;
   postgre
     .query(qstr, [title, comment, url, updated_at, q.id])
     .then(result => {
@@ -122,7 +103,7 @@ app.delete("/api/deleteItem", (req, res) => {
   const q = req.body;
   const user_id = req.session.user_id;
   const card_id = q.id;
-  const qstr = "DELETE FROM link_cards WHERE user_id = $1 and id = $2";
+  const qstr = `DELETE FROM ${card_table_name} WHERE user_id = $1 and id = $2`;
   postgre
     .query(qstr, [user_id, card_id])
     .then(result => {

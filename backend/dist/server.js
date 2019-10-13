@@ -1,18 +1,6 @@
 "use strict";
 
-var postgre = require("./db.js").pool; // postgre.connect((err, client, release) => {
-//   if (err) {
-//     return console.error("Error acquiring client", err.stack);
-//   }
-//   client.query("SELECT NOW()", (err, result) => {
-//     release();
-//     if (err) {
-//       return console.error("Error executing query", err.stack);
-//     }
-//     console.log(result.rows);
-//   });
-// });
-// パスワードの暗号化
+var postgre = require("./db.js").pool; // パスワードの暗号化
 
 
 var bcrypt = require("bcrypt");
@@ -62,19 +50,19 @@ var card_table_name = "link_cards"; // LinkCardのテーブル名
 
 app.post("/api/createLink", function (req, res) {
   var q = req.body;
+  console.log(q);
 
   if (!q) {
     console.error("送信されたデータはありません");
     return;
-  } // const [title, comment, url] = q;
+  }
 
-
-  var title = q.title;
-  var comment = q.comment;
-  var url = q.url;
+  var title = q.title,
+      comment = q.comment,
+      url = q.url;
   var create_at = get_date();
   var updated_at = create_at;
-  var qstr = "INSERT INTO link_cards (user_id, title, comment, url, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6)";
+  var qstr = "INSERT INTO ".concat(card_table_name, " (user_id, title, comment, url, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6)");
   postgre.query(qstr, [req.session.user_id, title, comment, url, create_at, updated_at]).then(function (result) {
     console.info("データ作成成功！\n", result);
     sendJSON(res, true, {
@@ -88,7 +76,7 @@ app.post("/api/createLink", function (req, res) {
   });
 });
 app.get("/api/getItems", function (req, res) {
-  var qstr = "SELECT * FROM link_cards where user_id = $1";
+  var qstr = "SELECT * FROM ".concat(card_table_name, " where user_id = $1");
   postgre.query(qstr, [req.session.user_id]).then(function (result) {
     console.log("以下のLinkデータを送信します\n", result.rows);
     sendJSON(res, true, {
@@ -103,13 +91,12 @@ app.get("/api/getItems", function (req, res) {
   });
 });
 app.put("/api/editItem", function (req, res) {
-  var q = req.body; // const [title, comment, url] = q;
-
-  var title = q.title;
-  var comment = q.comment;
-  var url = q.url;
+  var q = req.body;
+  var title = q.title,
+      comment = q.comment,
+      url = q.url;
   var updated_at = get_date();
-  var qstr = "UPDATE link_cards SET title = $1, comment = $2, url = $3, updated_at = $4 WHERE id = $5 ";
+  var qstr = "UPDATE ".concat(card_table_name, " SET title = $1, comment = $2, url = $3, updated_at = $4 WHERE id = $5");
   postgre.query(qstr, [title, comment, url, updated_at, q.id]).then(function (result) {
     console.log("更新完了\n", result);
   })["catch"](function (err) {
@@ -120,7 +107,7 @@ app["delete"]("/api/deleteItem", function (req, res) {
   var q = req.body;
   var user_id = req.session.user_id;
   var card_id = q.id;
-  var qstr = "DELETE FROM link_cards WHERE user_id = $1 and id = $2";
+  var qstr = "DELETE FROM ".concat(card_table_name, " WHERE user_id = $1 and id = $2");
   postgre.query(qstr, [user_id, card_id]).then(function (result) {
     console.log("データ削除に成功しました\n", result);
     sendJSON(res, true, {

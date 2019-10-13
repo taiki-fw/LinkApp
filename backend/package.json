@@ -4,7 +4,7 @@
   "main": "server.js",
   "license": "MIT",
   "scripts": {
-    "start": "yarn run babel src --out-dir dist & node ./dist/server.js"
+    "start": "babel -w src -d dist & nodemon ./dist/server.js"
   },
   "dependencies": {
     "@babel/preset-env": "^7.5.5",
@@ -16,6 +16,7 @@
   },
   "devDependencies": {
     "@babel/cli": "^7.6.4",
-    "@babel/core": "^7.6.4"
+    "@babel/core": "^7.6.4",
+    "nodemon": "^1.19.3"
   }
 }
