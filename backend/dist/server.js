@@ -48,6 +48,8 @@ function get_date(_timestamp) {
 
 var card_table_name = "link_cards"; // LinkCardのテーブル名
 
+var user_table_name = "users"; // Userのテーブル名
+
 app.post("/api/createLink", function (req, res) {
   var q = req.body;
   console.log(q);
@@ -121,7 +123,7 @@ app["delete"]("/api/deleteItem", function (req, res) {
   });
 });
 app.get("/api/users", function (req, res) {
-  postgre.query("SELECT * FROM users").then(function (result) {
+  postgre.query("SELECT * FROM ".concat(user_table_name)).then(function (result) {
     sendJSON(res, true, {
       logs: result.rows
     });
@@ -139,10 +141,10 @@ app.post("/api/user/registration", function (req, res) {
     return;
   }
 
-  var name = q.name;
-  var email = q.email;
+  var name = q.name,
+      email = q.email;
   var password = bcrypt.hashSync(q.password, saltRounds);
-  var qstr = "insert into users (user_id, email, password) values($1, $2, $3);";
+  var qstr = "insert into ".concat(user_table_name, " (user_id, email, password) values($1, $2, $3);");
   postgre.query(qstr, [name, email, password]).then(function (result) {
     console.log("Success\n", result);
 
@@ -162,7 +164,7 @@ app.post("/api/user/login", function (req, res) {
     return;
   }
 
-  var qstr = "SELECT * FROM users WHERE email = $1";
+  var qstr = "SELECT * FROM ".concat(user_table_name, " WHERE email = $1");
   postgre.query(qstr, [q.email]).then(function (result) {
     console.log(result);
     var account = result.rows[0];

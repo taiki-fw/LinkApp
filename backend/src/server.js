@@ -39,6 +39,7 @@ function get_date(_timestamp) {
 }
 
 const card_table_name = "link_cards"; // LinkCardのテーブル名
+const user_table_name = "users"; // Userのテーブル名
 
 app.post("/api/createLink", (req, res) => {
   const q = req.body;
@@ -118,7 +119,7 @@ app.delete("/api/deleteItem", (req, res) => {
 
 app.get("/api/users", (req, res) => {
   postgre
-    .query("SELECT * FROM users")
+    .query(`SELECT * FROM ${user_table_name}`)
     .then(result => {
       sendJSON(res, true, { logs: result.rows });
     })
@@ -133,11 +134,9 @@ app.post("/api/user/registration", (req, res) => {
     console.error("データが空です", q);
     return;
   }
-  const name = q.name;
-  const email = q.email;
+  const { name, email } = q;
   const password = bcrypt.hashSync(q.password, saltRounds);
-  const qstr =
-    "insert into users (user_id, email, password) values($1, $2, $3);";
+  const qstr = `insert into ${user_table_name} (user_id, email, password) values($1, $2, $3);`;
   postgre
     .query(qstr, [name, email, password])
     .then(result => {
@@ -158,7 +157,7 @@ app.post("/api/user/login", (req, res) => {
     console.log("データが空です", q);
     return;
   }
-  const qstr = "SELECT * FROM users WHERE email = $1";
+  const qstr = `SELECT * FROM ${user_table_name} WHERE email = $1`;
   postgre
     .query(qstr, [q.email])
     .then(result => {
