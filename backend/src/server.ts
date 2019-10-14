@@ -1,24 +1,12 @@
-const postgre = require("./db.js").pool;
-// postgre.connect((err, client, release) => {
-//   if (err) {
-//     return console.error("Error acquiring client", err.stack);
-//   }
-//   client.query("SELECT NOW()", (err, result) => {
-//     release();
-//     if (err) {
-//       return console.error("Error executing query", err.stack);
-//     }
-//     console.log(result.rows);
-//   });
-// });
+import postgre from "./db";
 
 // パスワードの暗号化
-const bcrypt = require("bcrypt");
+import * as bcrypt from "bcrypt";
 const saltRounds = 10; //ストレッチング回数
 
 // API
-const express = require("express");
-const bodyParser = require("body-parser");
+import * as express from "express";
+import * as bodyParser from "body-parser";
 const app = express();
 const port = 3001;
 app.listen(port, err => {
@@ -27,7 +15,7 @@ app.listen(port, err => {
 });
 app.use(bodyParser.json());
 // セッション
-const session = require("express-session");
+import * as session from "express-session";
 app.use(
   session({
     secret: "keyboard cat",
@@ -37,35 +25,33 @@ app.use(
 );
 
 // 時刻を日付に変更する関数
-function get_date(_timestamp) {
-  var _d = _timestamp ? new Date(_timestamp * 1000) : new Date();
+function get_date(_timestamp?) {
+  const _d = _timestamp ? new Date(_timestamp * 1000) : new Date();
 
-  var Y = _d.getFullYear();
-  var m = ("0" + (_d.getMonth() + 1)).slice(-2);
-  var d = ("0" + _d.getDate()).slice(-2);
-  var H = ("0" + _d.getHours()).slice(-2);
-  var i = ("0" + _d.getMinutes()).slice(-2);
-  var s = ("0" + _d.getSeconds()).slice(-2);
+  const Y = _d.getFullYear();
+  const m = ("0" + (_d.getMonth() + 1)).slice(-2);
+  const d = ("0" + _d.getDate()).slice(-2);
+  const H = ("0" + _d.getHours()).slice(-2);
+  const i = ("0" + _d.getMinutes()).slice(-2);
+  const s = ("0" + _d.getSeconds()).slice(-2);
 
   return Y + "/" + m + "/" + d + " " + H + ":" + i + ":" + s;
 }
 
 const card_table_name = "link_cards"; // LinkCardのテーブル名
+const user_table_name = "users"; // Userのテーブル名
 
 app.post("/api/createLink", (req, res) => {
   const q = req.body;
+  console.log(q);
   if (!q) {
     console.error("送信されたデータはありません");
     return;
   }
-  // const [title, comment, url] = q;
-  const title = q.title;
-  const comment = q.comment;
-  const url = q.url;
+  const { title, comment, url } = q;
   const create_at = get_date();
   const updated_at = create_at;
-  const qstr =
-    "INSERT INTO link_cards (user_id, title, comment, url, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6)";
+  const qstr = `INSERT INTO ${card_table_name} (user_id, title, comment, url, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6)`;
   postgre
     .query(qstr, [
       req.session.user_id,
@@ -86,7 +72,7 @@ app.post("/api/createLink", (req, res) => {
 });
 
 app.get("/api/getItems", (req, res) => {
-  const qstr = "SELECT * FROM link_cards where user_id = $1";
+  const qstr = `SELECT * FROM ${card_table_name} where user_id = $1`;
   postgre
     .query(qstr, [req.session.user_id])
     .then(result => {
@@ -101,13 +87,9 @@ app.get("/api/getItems", (req, res) => {
 
 app.put("/api/editItem", (req, res) => {
   const q = req.body;
-  // const [title, comment, url] = q;
-  const title = q.title;
-  const comment = q.comment;
-  const url = q.url;
+  const { title, comment, url } = q;
   const updated_at = get_date();
-  const qstr =
-    "UPDATE link_cards SET title = $1, comment = $2, url = $3, updated_at = $4 WHERE id = $5 ";
+  const qstr = `UPDATE ${card_table_name} SET title = $1, comment = $2, url = $3, updated_at = $4 WHERE id = $5`;
   postgre
     .query(qstr, [title, comment, url, updated_at, q.id])
     .then(result => {
@@ -122,7 +104,7 @@ app.delete("/api/deleteItem", (req, res) => {
   const q = req.body;
   const user_id = req.session.user_id;
   const card_id = q.id;
-  const qstr = "DELETE FROM link_cards WHERE user_id = $1 and id = $2";
+  const qstr = `DELETE FROM ${card_table_name} WHERE user_id = $1 and id = $2`;
   postgre
     .query(qstr, [user_id, card_id])
     .then(result => {
@@ -130,14 +112,14 @@ app.delete("/api/deleteItem", (req, res) => {
       sendJSON(res, true, { msg: "データ削除しました。" });
     })
     .catch(err => {
-      console.error("データ削除に失敗\n", errr);
+      console.error("データ削除に失敗\n", err);
       sendJSON(res, false, { msg: "データ削除出来ませんでした。" });
     });
 });
 
 app.get("/api/users", (req, res) => {
   postgre
-    .query("SELECT * FROM users")
+    .query(`SELECT * FROM ${user_table_name}`)
     .then(result => {
       sendJSON(res, true, { logs: result.rows });
     })
@@ -152,11 +134,9 @@ app.post("/api/user/registration", (req, res) => {
     console.error("データが空です", q);
     return;
   }
-  const name = q.name;
-  const email = q.email;
+  const { name, email } = q;
   const password = bcrypt.hashSync(q.password, saltRounds);
-  const qstr =
-    "insert into users (user_id, email, password) values($1, $2, $3);";
+  const qstr = `insert into ${user_table_name} (user_id, email, password) values($1, $2, $3);`;
   postgre
     .query(qstr, [name, email, password])
     .then(result => {
@@ -177,7 +157,7 @@ app.post("/api/user/login", (req, res) => {
     console.log("データが空です", q);
     return;
   }
-  const qstr = "SELECT * FROM users WHERE email = $1";
+  const qstr = `SELECT * FROM ${user_table_name} WHERE email = $1`;
   postgre
     .query(qstr, [q.email])
     .then(result => {
@@ -196,7 +176,7 @@ app.post("/api/user/login", (req, res) => {
 
 app.get("/api/logout", (req, res) => {
   console.log(req.session);
-  req.session.destroy();
+  req.session.destroy(() => {});
   console.log(req.session);
   sendJSON(res, true, { msg: "ログアウト" });
 });
@@ -210,7 +190,7 @@ app.get("/api/user/auth", (req, res) => {
   }
 });
 
-function sendJSON(res, result, obj) {
+function sendJSON(res, result: boolean, obj) {
   obj["result"] = result;
   res.json(obj);
 }

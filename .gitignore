@@ -2,3 +2,5 @@ node_modules
 .vscode
 .DS_Store
 .env
+backend/dist
+yarn-error.log
