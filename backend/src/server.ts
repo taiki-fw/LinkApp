@@ -1,4 +1,4 @@
-const postgre = require("./db.js").pool;
+const postgre = require("./db.ts").pool;
 
 // パスワードの暗号化
 const bcrypt = require("bcrypt");
@@ -25,7 +25,7 @@ app.use(
 );
 
 // 時刻を日付に変更する関数
-function get_date(_timestamp) {
+function get_date(_timestamp?) {
   var _d = _timestamp ? new Date(_timestamp * 1000) : new Date();
 
   var Y = _d.getFullYear();
@@ -112,7 +112,7 @@ app.delete("/api/deleteItem", (req, res) => {
       sendJSON(res, true, { msg: "データ削除しました。" });
     })
     .catch(err => {
-      console.error("データ削除に失敗\n", errr);
+      console.error("データ削除に失敗\n", err);
       sendJSON(res, false, { msg: "データ削除出来ませんでした。" });
     });
 });

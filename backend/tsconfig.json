@@ -3,7 +3,9 @@
     "module": "commonjs",
     "target": "ES5",
     "sourceMap": true,
-    "types": ["node"]
+    "types": ["node"],
+    "rootDir": "./src",
+    "outDir": "./dist"
   },
   "exclude": ["node_modules"]
 }
