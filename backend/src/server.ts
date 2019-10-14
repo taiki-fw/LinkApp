@@ -1,12 +1,12 @@
-const postgre = require("./db.ts").pool;
+import postgre from "./db";
 
 // パスワードの暗号化
-const bcrypt = require("bcrypt");
+import * as bcrypt from "bcrypt";
 const saltRounds = 10; //ストレッチング回数
 
 // API
-const express = require("express");
-const bodyParser = require("body-parser");
+import * as express from "express";
+import * as bodyParser from "body-parser";
 const app = express();
 const port = 3001;
 app.listen(port, err => {
@@ -15,7 +15,7 @@ app.listen(port, err => {
 });
 app.use(bodyParser.json());
 // セッション
-const session = require("express-session");
+import * as session from "express-session";
 app.use(
   session({
     secret: "keyboard cat",
@@ -26,14 +26,14 @@ app.use(
 
 // 時刻を日付に変更する関数
 function get_date(_timestamp?) {
-  var _d = _timestamp ? new Date(_timestamp * 1000) : new Date();
+  const _d = _timestamp ? new Date(_timestamp * 1000) : new Date();
 
-  var Y = _d.getFullYear();
-  var m = ("0" + (_d.getMonth() + 1)).slice(-2);
-  var d = ("0" + _d.getDate()).slice(-2);
-  var H = ("0" + _d.getHours()).slice(-2);
-  var i = ("0" + _d.getMinutes()).slice(-2);
-  var s = ("0" + _d.getSeconds()).slice(-2);
+  const Y = _d.getFullYear();
+  const m = ("0" + (_d.getMonth() + 1)).slice(-2);
+  const d = ("0" + _d.getDate()).slice(-2);
+  const H = ("0" + _d.getHours()).slice(-2);
+  const i = ("0" + _d.getMinutes()).slice(-2);
+  const s = ("0" + _d.getSeconds()).slice(-2);
 
   return Y + "/" + m + "/" + d + " " + H + ":" + i + ":" + s;
 }
@@ -176,7 +176,7 @@ app.post("/api/user/login", (req, res) => {
 
 app.get("/api/logout", (req, res) => {
   console.log(req.session);
-  req.session.destroy();
+  req.session.destroy(() => {});
   console.log(req.session);
   sendJSON(res, true, { msg: "ログアウト" });
 });
@@ -190,7 +190,7 @@ app.get("/api/user/auth", (req, res) => {
   }
 });
 
-function sendJSON(res, result, obj) {
+function sendJSON(res, result: boolean, obj) {
   obj["result"] = result;
   res.json(obj);
 }
