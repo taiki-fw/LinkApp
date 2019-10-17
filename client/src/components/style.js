@@ -161,7 +161,7 @@ export const EditButton = styled.button`
  position: absolute;
  z-index: 2;
  right: 0;
- bottom: 0;
+ bottom: 5px;
  @media (max-width:700px) {
     font-size: 10px;
  }

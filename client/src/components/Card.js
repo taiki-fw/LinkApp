@@ -46,7 +46,7 @@ class Card extends React.Component {
   render() {
     const actionText = this.state.completed ? "編集" : "完了";
     const actionBtn = (
-      <EditButton style={styles.button} onClick={() => this.handleClick()}>
+      <EditButton onClick={() => this.handleClick()}>
         {actionText}
       </EditButton>
     );
@@ -95,13 +95,9 @@ const styles = {
     zIndex: "1",
     display: "block",
     textDecoration: "none",
-    color: "#0D3F67"
-  },
-  button: {
-    position: "absolute",
-    zIndex: "2",
-    right: "0",
-    bottom: "0"
+    color: "#0D3F67",
+    height: "100%",
+    width: "100%",
   }
 };
 
