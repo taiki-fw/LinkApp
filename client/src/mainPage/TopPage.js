@@ -1,20 +1,38 @@
 import React from "react";
+import { withRouter } from "react-router-dom";
 import request from "superagent";
 
-import Card from "./Card";
+import Card from "../components/Card";
 
-export default class CardList extends React.Component {
+function get_timestamp(_date) {
+  var _d = _date ? new Date(_date) : new Date();
+
+  return Math.floor(_d.getTime() / 1000);
+}
+
+class TopPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       items: [],
       currentPage: 1,
-      itemPerPage: 12
+      itemPerPage: 12,
+      searchWord: ""
     };
   }
 
-  componentWillMount() {
-    this.getLinkData();
+  componentDidMount() {
+    request.get("/api/user/auth").end((err, data) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+      if (!data.body.auth) {
+        this.props.history.push("/user/login");
+      } else {
+        this.getLinkData();
+      }
+    });
   }
 
   getLinkData() {
@@ -27,6 +45,11 @@ export default class CardList extends React.Component {
     });
   }
 
+  search(e) {
+    const word = e.target.value;
+    this.setState({ searchWord: word });
+  }
+
   pageNumClick(e) {
     const pageNum = e.target.id;
     this.setState({ currentPage: pageNum });
@@ -37,13 +60,29 @@ export default class CardList extends React.Component {
     const IndexOfFirstItem = IndexOfLastItem - this.state.itemPerPage;
 
     const limitCard = this.state.items
-      .sort((p, n) => -(p.createTime - n.createTime))
+      .filter(i => {
+        const word = this.state.searchWord;
+        if (!word) {
+          return true;
+        } else {
+          let title = i.title.match(word);
+          let comment = i.comment.match(word);
+          if (title || comment) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+      })
+      .sort((p, n) => {
+        return -(get_timestamp(p.created_at) - get_timestamp(n.created_at));
+      })
       .slice(IndexOfFirstItem, IndexOfLastItem);
 
     const CardList = limitCard.map(i => (
       <Card
-        key={i._id}
-        id={i._id}
+        key={i.id}
+        id={i.id}
         title={i.title}
         comment={i.comment}
         url={i.url}
@@ -72,6 +111,12 @@ export default class CardList extends React.Component {
 
     return (
       <>
+        <input
+          type="text"
+          onChange={e => this.search(e)}
+          value={this.state.searchWord}
+          placeholder="検索"
+        />
         <ul style={styles.ul}>{CardList}</ul>
         <ul style={styles.ul}>{RenderPagenationBtn}</ul>
       </>
@@ -92,3 +137,5 @@ const styles = {
     color: "blue"
   }
 };
+
+export default withRouter(TopPage);

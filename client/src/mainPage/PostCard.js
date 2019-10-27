@@ -3,13 +3,13 @@ import { withRouter, Link } from "react-router-dom";
 import request from "superagent";
 import { H3, H2, RowDiv, PostInput, CenterDiv, PostDiv, Button } from './style.js';
 
-class App extends React.Component {
+class PostCard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       title: "",
       comment: "",
-      url: "",
+      url: ""
     };
   }
 
@@ -23,9 +23,9 @@ class App extends React.Component {
 
   post() {
     request
-      .post("/api/link")
+      .post("/api/createLink")
       .send({
-       title: this.state.title,
+        title: this.state.title,
         comment: this.state.comment,
         url: this.state.url
       })
@@ -40,30 +40,31 @@ class App extends React.Component {
 
   render() {
     const displayStyle = {
-      color: 'red',
-      fontSize: '5px',
-      lineHeight: '20px'
-    }
-    let msgTitle = null
-    let msgUrl = null
-    let sendDisable = true
-    let sendUrlCheck = "ng"
-    let sendBtn = null
-    let sendTitleCheck = "ng"
-    let maxLength = 20
-    let minLength = 0
-    let titleLength = this.state.title.length
-    let checkUrl = this.state.url.match(/^https?(:\/\/[-_.!~*'()a-zA-Z0-9;/?:@&=+$,%#]+)$/)
+      color: "red",
+      fontSize: "5px"
+    };
+    let msgTitle = null;
+    let msgUrl = null;
+    let sendDisable = true;
+    let sendUrlCheck = "ng";
+    let sendBtn = null;
+    let sendTitleCheck = "ng";
+    let maxLength = 20;
+    let minLength = 0;
+    let titleLength = this.state.title.length;
+    let checkUrl = this.state.url.match(
+      /^https?(:\/\/[-_.!~*'()a-zA-Z0-9;/?:@&=+$,%#]+)$/
+    );
 
     if (titleLength > maxLength) {
-      msgTitle = <p style={displayStyle}>*20文字以内</p>
-      sendTitleCheck = "ng"
+      msgTitle = <p style={displayStyle}>*20文字以内</p>;
+      sendTitleCheck = "ng";
     } else if (titleLength <= minLength) {
-      msgTitle = <p style={displayStyle}>*必須</p>
-      sendTitleCheck = "ng"
+      msgTitle = <p style={displayStyle}>*必須</p>;
+      sendTitleCheck = "ng";
     } else {
-      msgTitle = <p></p>
-      sendTitleCheck = "ok"
+      msgTitle = <p></p>;
+      sendTitleCheck = "ok";
     }
 
     // switch(alertTitleType) {
@@ -75,15 +76,15 @@ class App extends React.Component {
     //     msgTitle = <p style={displayStyle}>*必須</p>
     // }
 
-    if (this.state.url === ""){
-      msgUrl = <p style={displayStyle}>*必須</p>
-      sendUrlCheck = "ng"
-    }else if (checkUrl !== null){
-      msgUrl = <p></p>
-      sendUrlCheck = "ok"
-    }else {
-      msgUrl = <p style={displayStyle}>リンクを貼ってください</p>
-      sendUrlCheck = "ng"
+    if (this.state.url === "") {
+      msgUrl = <p style={displayStyle}>*必須</p>;
+      sendUrlCheck = "ng";
+    } else if (checkUrl !== null) {
+      msgUrl = <p></p>;
+      sendUrlCheck = "ok";
+    } else {
+      msgUrl = <p style={displayStyle}>リンクを貼ってください</p>;
+      sendUrlCheck = "ng";
     }
 
     // switch(alertUrlType) {
@@ -93,14 +94,29 @@ class App extends React.Component {
     //     msgUrl = <p></p>
     // }
 
-    if (this.state.title && this.state.url && sendTitleCheck === "ok" && sendUrlCheck === "ok") {
-      sendDisable = false
+    if (
+      this.state.title &&
+      this.state.url &&
+      sendTitleCheck === "ok" &&
+      sendUrlCheck === "ok"
+    ) {
+      sendDisable = false;
     } else {
-      sendDisable = true
+      sendDisable = true;
     }
 
+<<<<<<< HEAD:client/src/components/App.js
     sendBtn = < Button id="formBtn" onClick={e => this.post()} disabled={sendDisable} > 送信</Button >
   
+=======
+    sendBtn = (
+      <button id="formBtn" onClick={e => this.post()} disabled={sendDisable}>
+        {" "}
+        送信
+      </button>
+    );
+
+>>>>>>> 970cb522574b4db72fc98daf52c6a0e544bc424c:client/src/mainPage/PostCard.js
     return (
       <>
         <PostDiv>
@@ -151,12 +167,16 @@ class App extends React.Component {
         <br />
         <CenterDiv>
         {sendBtn}
+<<<<<<< HEAD:client/src/components/App.js
         </CenterDiv>
         </PostDiv>
         <Link to="/" style={styles.Link}>
           キャンセル
         </Link>
         </>
+=======
+      </>
+>>>>>>> 970cb522574b4db72fc98daf52c6a0e544bc424c:client/src/mainPage/PostCard.js
     );
   }
 }
@@ -174,4 +194,4 @@ const styles = {
 
 };
 
-export default withRouter(App);
+export default withRouter(PostCard);
