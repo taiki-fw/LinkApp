@@ -1,7 +1,15 @@
 import React from "react";
 import { withRouter, Link } from "react-router-dom";
 import request from "superagent";
-import { H3, H2, RowDiv, PostInput, CenterDiv, PostDiv, Button } from './style.js';
+import {
+  H3,
+  H2,
+  RowDiv,
+  PostInput,
+  CenterDiv,
+  PostDiv,
+  Button
+} from "../components/style.js";
 
 class PostCard extends React.Component {
   constructor(props) {
@@ -105,78 +113,67 @@ class PostCard extends React.Component {
       sendDisable = true;
     }
 
-<<<<<<< HEAD:client/src/components/App.js
-    sendBtn = < Button id="formBtn" onClick={e => this.post()} disabled={sendDisable} > 送信</Button >
-  
-=======
     sendBtn = (
-      <button id="formBtn" onClick={e => this.post()} disabled={sendDisable}>
+      <Button id="formBtn" onClick={e => this.post()} disabled={sendDisable}>
         {" "}
         送信
-      </button>
+      </Button>
     );
 
->>>>>>> 970cb522574b4db72fc98daf52c6a0e544bc424c:client/src/mainPage/PostCard.js
     return (
       <>
         <PostDiv>
           <label>
             <H2>新規投稿</H2>
             <CenterDiv>
-            <RowDiv>
-            <H3>見出し</H3>
-            {msgTitle}
-            </RowDiv>
-            <PostInput
-              type="text"
-              value={this.state.title}
-              name="title"
-              onChange={e => this.handleChange(e)}
-            />
+              <RowDiv>
+                <H3>見出し</H3>
+                {msgTitle}
+              </RowDiv>
+              <PostInput
+                type="text"
+                value={this.state.title}
+                name="title"
+                onChange={e => this.handleChange(e)}
+              />
             </CenterDiv>
           </label>
           <br />
           <label>
             <RowDiv>
-            <H3>コメント</H3>
+              <H3>コメント</H3>
             </RowDiv>
             <CenterDiv>
-            <PostInput
-              type="text"
-              value={this.state.comment}
-              name="comment"
-              onChange={e => this.handleChange(e)}
-            />
+              <PostInput
+                type="text"
+                value={this.state.comment}
+                name="comment"
+                onChange={e => this.handleChange(e)}
+              />
             </CenterDiv>
           </label>
           <br />
           <label>
             <RowDiv>
-            <H3>URL</H3>
-            {msgUrl}
+              <H3>URL</H3>
+              {msgUrl}
             </RowDiv>
             <CenterDiv>
-            <PostInput
-              type="text"
-              value={this.state.url}
-              name="url"
-              onChange={e => this.handleChange(e)}
-            />
+              <PostInput
+                type="text"
+                value={this.state.url}
+                name="url"
+                onChange={e => this.handleChange(e)}
+              />
             </CenterDiv>
           </label>
-        <br />
-        <CenterDiv>
-        {sendBtn}
-<<<<<<< HEAD:client/src/components/App.js
-        </CenterDiv>
+          <br />
+          <CenterDiv>{sendBtn}</CenterDiv>
         </PostDiv>
         <Link to="/" style={styles.Link}>
           キャンセル
         </Link>
-        </>
-=======
       </>
->>>>>>> 970cb522574b4db72fc98daf52c6a0e544bc424c:client/src/mainPage/PostCard.js
     );
   }
 }
@@ -190,8 +187,7 @@ const styles = {
     borderRadius: "5px",
     padding: "0.5em 1.5em 0.5em 0",
     textAlign: "center"
-  },
-
+  }
 };
 
 export default withRouter(PostCard);
