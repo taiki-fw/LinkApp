@@ -50,6 +50,8 @@ export default function linkCards(state = initialState, action) {
         isFetching: true,
         data: []
       });
+    default:
+      return state;
   }
 }
 
