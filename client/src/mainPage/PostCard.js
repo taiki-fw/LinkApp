@@ -2,7 +2,6 @@ import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { withRouter, Link } from "react-router-dom";
-import request from "superagent";
 
 import { addFetchLinkCard } from "../reducer/modules/linkCards";
 
@@ -137,6 +136,10 @@ class PostCard extends React.Component {
   }
 }
 
+const mapStateToProps = state => {
+  return { isFetching: state.linkCards.isFetching };
+};
+
 const mapDispatchToProps = dispatch => {
   return bindActionCreators({ addFetchLinkCard }, dispatch);
 };
@@ -154,7 +157,7 @@ const styles = {
 
 export default withRouter(
   connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps
   )(PostCard)
 );
