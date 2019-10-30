@@ -38,7 +38,7 @@ function addLinkCard(linkDataId) {
   };
 }
 
-export function linkCards(state = initialState, action) {
+export default function linkCards(state = initialState, action) {
   switch (action.type) {
     case POST_LINK:
       return Object.assign({}, state, {
