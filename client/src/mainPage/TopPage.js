@@ -1,7 +1,10 @@
 import React from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 import { withRouter } from "react-router-dom";
 import request from "superagent";
 
+import { fetchLinkCard } from "../reducer/modules/linkCards";
 import Card from "../components/Card";
 
 function get_timestamp(_date) {
@@ -14,7 +17,6 @@ class TopPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      items: [],
       currentPage: 1,
       itemPerPage: 12,
       searchWord: ""
@@ -30,18 +32,8 @@ class TopPage extends React.Component {
       if (!data.body.auth) {
         this.props.history.push("/user/login");
       } else {
-        this.getLinkData();
+        this.props.fetchLinkCard();
       }
-    });
-  }
-
-  getLinkData() {
-    request.get("/api/getItems").end((err, data) => {
-      if (err) {
-        console.error(err);
-        return;
-      }
-      this.setState({ items: data.body.logs });
     });
   }
 
@@ -59,7 +51,7 @@ class TopPage extends React.Component {
     const IndexOfLastItem = this.state.currentPage * this.state.itemPerPage;
     const IndexOfFirstItem = IndexOfLastItem - this.state.itemPerPage;
 
-    const limitCard = this.state.items
+    const limitCard = this.props.data
       .filter(i => {
         const word = this.state.searchWord;
         if (!word) {
@@ -93,7 +85,7 @@ class TopPage extends React.Component {
     const PagenationBtn = [];
     for (
       let i = 1;
-      i <= Math.ceil(this.state.items.length / this.state.itemPerPage);
+      i <= Math.ceil(this.props.data.length / this.state.itemPerPage);
       i++
     ) {
       PagenationBtn.push(i);
@@ -138,4 +130,20 @@ const styles = {
   }
 };
 
-export default withRouter(TopPage);
+const mapStateToProps = state => {
+  console.log(state.linkCards.data);
+  return {
+    data: state.linkCards.data
+  };
+};
+
+const mapToDispatchProps = dispatch => {
+  return bindActionCreators({ fetchLinkCard }, dispatch);
+};
+
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapToDispatchProps
+  )(TopPage)
+);

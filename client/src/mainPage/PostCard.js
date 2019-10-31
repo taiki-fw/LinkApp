@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { withRouter, Link } from "react-router-dom";
 
-import { addFetchLinkCard } from "../reducer/modules/linkCards";
+import { addLinkCard } from "../reducer/modules/linkCards";
 
 class PostCard extends React.Component {
   constructor(props) {
@@ -141,7 +141,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ addFetchLinkCard }, dispatch);
+  return bindActionCreators({ addLinkCard }, dispatch);
 };
 
 const styles = {

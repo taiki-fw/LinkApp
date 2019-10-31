@@ -6,14 +6,22 @@ let initialState = {
 };
 
 // action types
-const GET_LINK = "GET_LINK";
+const REQUEST_FETCH = "REQUEST_FETCH";
+const RECEIVE_FETCH = "RECEIVE_FETCH";
 const POST_LINK = "POST_LINK";
 const EDIT_LINK = "EDIT_LINK";
 const DELETE_LINK = "DELETE_LINK";
 
-function getLinkCard() {
+function requestFetch() {
   return {
-    type: GET_LINK
+    type: REQUEST_FETCH
+  };
+}
+
+function recieveFetch(linkData) {
+  return {
+    type: RECEIVE_FETCH,
+    linkData
   };
 }
 
@@ -31,7 +39,7 @@ function editLinkCard(linkData) {
   };
 }
 
-function addLinkCard(linkDataId) {
+function deleteLinkCard(linkDataId) {
   return {
     type: DELETE_LINK,
     linkDataId
@@ -40,25 +48,28 @@ function addLinkCard(linkDataId) {
 
 export default function linkCards(state = initialState, action) {
   switch (action.type) {
-    case POST_LINK:
-      return Object.assign({}, state, {
-        isFetching: false,
-        data: [...state.data, action.linkData]
-      });
-    case GET_LINK:
+    case REQUEST_FETCH:
       return Object.assign({}, state, {
         isFetching: true,
-        data: []
+        data: [...state.data]
+      });
+    case RECEIVE_FETCH:
+      return Object.assign({}, state, {
+        isFetching: false,
+        data: action.linkData
+      });
+    case POST_LINK:
+      return Object.assign({}, state, {
+        data: [action.linkData]
       });
     default:
       return state;
   }
 }
 
-export function addFetchLinkCard(linkData) {
+export function addLinkCard(linkData) {
   return function(dispatch) {
-    dispatch(postLinkCardSuccess());
-    return request
+    request
       .post("/api/createLink")
       .send(linkData)
       .end((err, data) => {
@@ -68,5 +79,18 @@ export function addFetchLinkCard(linkData) {
         }
         dispatch(postLinkCardSuccess(data));
       });
+  };
+}
+
+export function fetchLinkCard() {
+  return function(dispatch) {
+    dispatch(requestFetch());
+    request.get("/api/getItems").end((err, data) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+      dispatch(recieveFetch(data.body.logs));
+    });
   };
 }
