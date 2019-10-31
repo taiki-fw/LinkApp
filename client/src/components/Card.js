@@ -1,5 +1,11 @@
 import React from "react";
-import request from "superagent";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+
+import {
+  asyncEditLinkCard,
+  asyncDeleteLinkCard
+} from "../reducer/modules/linkCards";
 
 class Card extends React.Component {
   constructor(props) {
@@ -23,39 +29,14 @@ class Card extends React.Component {
     if (this.state.completed) {
       this.setState({ completed: !this.state.completed });
     } else if (!this.state.completed) {
-      request
-        .put("/api/editItem")
-        .send({
-          id: this.props.id,
-          title: this.state.title,
-          comment: this.state.comment,
-          url: this.state.url
-        })
-        .end((err, data) => {
-          if (err) {
-            console.error(err);
-            return;
-          }
-        });
+      this.props.asyncEditLinkCard({
+        id: this.props.id,
+        title: this.state.title,
+        comment: this.state.comment,
+        url: this.state.url
+      });
       this.setState({ completed: !this.state.completed });
     }
-  }
-
-  delete() {
-    const id = this.props.id;
-    request
-      .delete("/api/deleteItem")
-      .send({
-        id: id
-      })
-      .end((err, res) => {
-        if (err) {
-          console.error(err);
-          return;
-        }
-        window.alert(res.body.msg);
-        this.props.getLinkData();
-      });
   }
 
   render() {
@@ -82,7 +63,12 @@ class Card extends React.Component {
               <p>{this.state.comment}</p>
             </a>
             {actionBtn}
-            <button style={styles.buttonD} onClick={() => this.delete()}>
+            <button
+              style={styles.buttonD}
+              onClick={() => {
+                this.props.asyncDeleteLinkCard(this.props.id);
+              }}
+            >
               削除
             </button>
           </li>
@@ -149,4 +135,14 @@ const styles = {
   }
 };
 
-export default Card;
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators(
+    { asyncEditLinkCard, asyncDeleteLinkCard },
+    dispatch
+  );
+};
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(Card);
