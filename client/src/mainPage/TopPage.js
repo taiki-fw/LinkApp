@@ -78,7 +78,7 @@ class TopPage extends React.Component {
         title={i.title}
         comment={i.comment}
         url={i.url}
-        getLinkData={() => this.getLinkData()}
+        getLinkData={() => this.props.fetchLinkCard()}
       />
     ));
 
@@ -131,7 +131,6 @@ const styles = {
 };
 
 const mapStateToProps = state => {
-  console.log(state.linkCards.data);
   return {
     data: state.linkCards.data
   };

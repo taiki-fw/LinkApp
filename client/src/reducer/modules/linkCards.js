@@ -1,6 +1,7 @@
 import request from "superagent";
 
 let initialState = {
+  msg: "",
   isFetching: false,
   data: []
 };
@@ -39,10 +40,10 @@ function editLinkCard(linkData) {
   };
 }
 
-function deleteLinkCard(linkDataId) {
+function deleteLinkCard(msg) {
   return {
     type: DELETE_LINK,
-    linkDataId
+    msg
   };
 }
 
@@ -62,9 +63,26 @@ export default function linkCards(state = initialState, action) {
       return Object.assign({}, state, {
         data: [action.linkData]
       });
+    case DELETE_LINK:
+      return Object.assign({}, state, {
+        msg: action.msg
+      });
     default:
       return state;
   }
+}
+
+export function fetchLinkCard() {
+  return function(dispatch) {
+    dispatch(requestFetch());
+    request.get("/api/getItems").end((err, data) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+      dispatch(recieveFetch(data.body.logs));
+    });
+  };
 }
 
 export function addLinkCard(linkData) {
@@ -82,15 +100,19 @@ export function addLinkCard(linkData) {
   };
 }
 
-export function fetchLinkCard() {
+export function asyncDeleteLinkCard(linkCard_id) {
   return function(dispatch) {
-    dispatch(requestFetch());
-    request.get("/api/getItems").end((err, data) => {
-      if (err) {
-        console.error(err);
-        return;
-      }
-      dispatch(recieveFetch(data.body.logs));
-    });
+    request
+      .delete("/api/deleteItem")
+      .send({
+        id: linkCard_id
+      })
+      .end((err, res) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+        dispatch(deleteLinkCard(res.body.msg));
+      });
   };
 }

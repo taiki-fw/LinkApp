@@ -24,7 +24,7 @@ class PostCard extends React.Component {
   }
 
   post() {
-    this.props.addFetchLinkCard({
+    this.props.addLinkCard({
       title: this.state.title,
       comment: this.state.comment,
       url: this.state.url

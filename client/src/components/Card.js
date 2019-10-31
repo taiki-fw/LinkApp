@@ -1,5 +1,12 @@
 import React from "react";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
 import request from "superagent";
+
+import {
+  fetchLinkCard,
+  asyncDeleteLinkCard
+} from "../reducer/modules/linkCards";
 
 class Card extends React.Component {
   constructor(props) {
@@ -41,23 +48,6 @@ class Card extends React.Component {
     }
   }
 
-  delete() {
-    const id = this.props.id;
-    request
-      .delete("/api/deleteItem")
-      .send({
-        id: id
-      })
-      .end((err, res) => {
-        if (err) {
-          console.error(err);
-          return;
-        }
-        window.alert(res.body.msg);
-        this.props.getLinkData();
-      });
-  }
-
   render() {
     const actionText = this.state.completed ? "編集" : "完了";
     const actionBtn = (
@@ -82,7 +72,12 @@ class Card extends React.Component {
               <p>{this.state.comment}</p>
             </a>
             {actionBtn}
-            <button style={styles.buttonD} onClick={() => this.delete()}>
+            <button
+              style={styles.buttonD}
+              onClick={() => {
+                this.props.asyncDeleteLinkCard(this.props.id);
+              }}
+            >
               削除
             </button>
           </li>
@@ -149,4 +144,15 @@ const styles = {
   }
 };
 
-export default Card;
+const mapStateToProps = state => {
+  return {};
+};
+
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators({ fetchLinkCard, asyncDeleteLinkCard }, dispatch);
+};
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(Card);
