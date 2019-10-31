@@ -33,10 +33,10 @@ function postLinkCardSuccess(linkData) {
   };
 }
 
-function editLinkCard(linkData) {
+function editLinkCard(msg) {
   return {
     type: EDIT_LINK,
-    linkData
+    msg
   };
 }
 
@@ -51,17 +51,24 @@ export default function linkCards(state = initialState, action) {
   switch (action.type) {
     case REQUEST_FETCH:
       return Object.assign({}, state, {
+        msg: state.msg,
         isFetching: true,
         data: [...state.data]
       });
     case RECEIVE_FETCH:
       return Object.assign({}, state, {
+        msg: state.msg,
         isFetching: false,
         data: action.linkData
       });
     case POST_LINK:
       return Object.assign({}, state, {
+        msg: state.msg,
         data: [action.linkData]
+      });
+    case EDIT_LINK:
+      return Object.assign({}, state, {
+        msg: action.msg
       });
     case DELETE_LINK:
       return Object.assign({}, state, {
@@ -100,6 +107,29 @@ export function addLinkCard(linkData) {
   };
 }
 
+export function asyncEditLinkCard(newLinkCard) {
+  return function(dispatch) {
+    request
+      .put("/api/editItem")
+      .send(newLinkCard)
+      .end((err, data) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+        dispatch(editLinkCard(data.body.msg));
+      });
+    dispatch(requestFetch());
+    request.get("/api/getItems").end((err, data) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+      dispatch(recieveFetch(data.body.logs));
+    });
+  };
+}
+
 export function asyncDeleteLinkCard(linkCard_id) {
   return function(dispatch) {
     request
@@ -113,6 +143,14 @@ export function asyncDeleteLinkCard(linkCard_id) {
           return;
         }
         dispatch(deleteLinkCard(res.body.msg));
+        dispatch(requestFetch());
+        request.get("/api/getItems").end((err, data) => {
+          if (err) {
+            console.error(err);
+            return;
+          }
+          dispatch(recieveFetch(data.body.logs));
+        });
       });
   };
 }

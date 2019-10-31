@@ -1,10 +1,9 @@
 import React from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import request from "superagent";
 
 import {
-  fetchLinkCard,
+  asyncEditLinkCard,
   asyncDeleteLinkCard
 } from "../reducer/modules/linkCards";
 
@@ -30,20 +29,12 @@ class Card extends React.Component {
     if (this.state.completed) {
       this.setState({ completed: !this.state.completed });
     } else if (!this.state.completed) {
-      request
-        .put("/api/editItem")
-        .send({
-          id: this.props.id,
-          title: this.state.title,
-          comment: this.state.comment,
-          url: this.state.url
-        })
-        .end((err, data) => {
-          if (err) {
-            console.error(err);
-            return;
-          }
-        });
+      this.props.asyncEditLinkCard({
+        id: this.props.id,
+        title: this.state.title,
+        comment: this.state.comment,
+        url: this.state.url
+      });
       this.setState({ completed: !this.state.completed });
     }
   }
@@ -144,12 +135,11 @@ const styles = {
   }
 };
 
-const mapStateToProps = state => {
-  return {};
-};
-
 const mapDispatchToProps = dispatch => {
-  return bindActionCreators({ fetchLinkCard, asyncDeleteLinkCard }, dispatch);
+  return bindActionCreators(
+    { asyncEditLinkCard, asyncDeleteLinkCard },
+    dispatch
+  );
 };
 
 export default connect(
