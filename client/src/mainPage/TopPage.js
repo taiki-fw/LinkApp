@@ -95,12 +95,11 @@ const styles = {
 };
 
 const mapStateToProps = state => {
+  const paginationObj = state.pagination;
+  const lastItem = paginationObj.currentPage * paginationObj.itemPerPage;
+  const firstItem = lastItem - paginationObj.itemPerPage;
   return {
-    data: state.linkCards.data.slice(
-      state.pagination.currentPage * state.pagination.itemPerPage -
-        state.pagination.itemPerPage,
-      state.pagination.currentPage * state.pagination.itemPerPage
-    )
+    data: state.linkCards.data.slice(firstItem, lastItem)
   };
 };
 
