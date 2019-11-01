@@ -32,6 +32,6 @@ At first please command `brew services stop postgresql` in your local.
 
 if you didn't create docker container to follow description above , try to halt postgres in your localhost. 
 
-## git rules
+## 
 
-https://www.dropbox.com/s/4ncn4r50mqk3w4r/Git%E3%83%AB%E3%83%BC%E3%83%AB.pdf?dl=0
+https://www.dropbox.com/scl/fi/4fr7n7jiqfc4iuus74r2t/.paper?dl=0&rlkey=ewr8mnkmt6mmsljmsrsl1n1qn
