@@ -1,8 +1,6 @@
 let initialState = {
   currentPage: 1,
-  itemPerPage: 10,
-  lastItem: currentPage * itemPerPage,
-  firstItem: lastItem - itemPerPage
+  itemPerPage: 10
 };
 
 const CHANGE_PAGE = "CHANGE_PAGE";

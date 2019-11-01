@@ -5,6 +5,7 @@ import { withRouter } from "react-router-dom";
 import request from "superagent";
 
 import { fetchLinkCard } from "../reducer/modules/linkCards";
+import PaginationBtn from "../Functional/pagination";
 import Card from "../components/Card";
 
 function get_timestamp(_date) {
@@ -17,8 +18,6 @@ class TopPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentPage: 1,
-      itemPerPage: 12,
       searchWord: ""
     };
   }
@@ -42,15 +41,7 @@ class TopPage extends React.Component {
     this.setState({ searchWord: word });
   }
 
-  pageNumClick(e) {
-    const pageNum = e.target.id;
-    this.setState({ currentPage: pageNum });
-  }
-
   render() {
-    const IndexOfLastItem = this.state.currentPage * this.state.itemPerPage;
-    const IndexOfFirstItem = IndexOfLastItem - this.state.itemPerPage;
-
     const limitCard = this.props.data
       .filter(i => {
         const word = this.state.searchWord;
@@ -68,8 +59,7 @@ class TopPage extends React.Component {
       })
       .sort((p, n) => {
         return -(get_timestamp(p.created_at) - get_timestamp(n.created_at));
-      })
-      .slice(IndexOfFirstItem, IndexOfLastItem);
+      });
 
     const CardList = limitCard.map(i => (
       <Card
@@ -81,26 +71,6 @@ class TopPage extends React.Component {
         getLinkData={() => this.props.fetchLinkCard()}
       />
     ));
-
-    const PagenationBtn = [];
-    for (
-      let i = 1;
-      i <= Math.ceil(this.props.data.length / this.state.itemPerPage);
-      i++
-    ) {
-      PagenationBtn.push(i);
-    }
-    const RenderPagenationBtn = PagenationBtn.map(n => (
-      <li
-        key={n}
-        id={n}
-        onClick={e => this.pageNumClick(e)}
-        style={styles.pageBtn}
-      >
-        {n}
-      </li>
-    ));
-
     return (
       <>
         <input
@@ -110,7 +80,7 @@ class TopPage extends React.Component {
           placeholder="検索"
         />
         <ul style={styles.ul}>{CardList}</ul>
-        <ul style={styles.ul}>{RenderPagenationBtn}</ul>
+        <PaginationBtn />
       </>
     );
   }
@@ -121,18 +91,16 @@ const styles = {
     display: "flex",
     flexWrap: "wrap",
     listStyleType: "none"
-  },
-  pageBtn: {
-    padding: "0.25em 0.5em",
-    margin: "0.1em",
-    border: "1px solid blue",
-    color: "blue"
   }
 };
 
 const mapStateToProps = state => {
   return {
-    data: state.linkCards.data
+    data: state.linkCards.data.slice(
+      state.pagination.currentPage * state.pagination.itemPerPage -
+        state.pagination.itemPerPage,
+      state.pagination.currentPage * state.pagination.itemPerPage
+    )
   };
 };
 
