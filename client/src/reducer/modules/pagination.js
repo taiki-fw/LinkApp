@@ -7,14 +7,14 @@ let initialState = {
 
 const CHANGE_PAGE = "CHANGE_PAGE";
 
-function changePage(page_num) {
+export function changePage(page_num) {
   return {
     type: CHANGE_PAGE,
     page_num
   };
 }
 
-export function pagination(state = initialState, action) {
+export default function pagination(state = initialState, action) {
   switch (action.type) {
     case CHANGE_PAGE:
       return Object.assign({}, state, {
