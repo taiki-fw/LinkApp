@@ -1,33 +1,21 @@
 import React from "react";
+import { Provider } from "react-redux";
 import ReactDOM from "react-dom";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
-import "./reset.css";
-import noMatch from "./noMatch.js";
-
-import Header from "./components/Header";
-import PostCard from "./mainPage/PostCard";
-import TopPage from "./mainPage/TopPage";
-import CreateUser from "./mainPage/CreateUser";
-import Login from "./mainPage/Login";
-import Users from "./mainPage/Users";
 import * as serviceWorker from "./serviceWorker";
+import Application from "./Apps";
+import store from "./store/store";
+import "./reset.css";
 
-const Application = () => (
-  <Router>
-    <Header />
-    <Switch>
-      <Route exact path="/" component={TopPage} />
-      <Route path="/post" component={PostCard} />
-      <Route path="/user/registrations" component={CreateUser} />
-      <Route path="/user/login" component={Login} />
-      <Route path="/user/index" component={Users} />
-      <Route component={noMatch} />
-    </Switch>
-  </Router>
-);
+function App() {
+  return (
+    <Provider store={store}>
+      <Application />
+    </Provider>
+  );
+}
 
-ReactDOM.render(<Application />, document.getElementById("root"));
+ReactDOM.render(<App />, document.getElementById("root"));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

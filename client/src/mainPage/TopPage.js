@@ -1,7 +1,11 @@
 import React from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 import { withRouter } from "react-router-dom";
 import request from "superagent";
 
+import { fetchLinkCard } from "../reducer/modules/linkCards";
+import PaginationBtn from "../Functional/pagination";
 import Card from "../components/Card";
 
 function get_timestamp(_date) {
@@ -14,9 +18,6 @@ class TopPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      items: [],
-      currentPage: 1,
-      itemPerPage: 12,
       searchWord: ""
     };
   }
@@ -30,18 +31,8 @@ class TopPage extends React.Component {
       if (!data.body.auth) {
         this.props.history.push("/user/login");
       } else {
-        this.getLinkData();
+        this.props.fetchLinkCard();
       }
-    });
-  }
-
-  getLinkData() {
-    request.get("/api/getItems").end((err, data) => {
-      if (err) {
-        console.error(err);
-        return;
-      }
-      this.setState({ items: data.body.logs });
     });
   }
 
@@ -50,16 +41,8 @@ class TopPage extends React.Component {
     this.setState({ searchWord: word });
   }
 
-  pageNumClick(e) {
-    const pageNum = e.target.id;
-    this.setState({ currentPage: pageNum });
-  }
-
   render() {
-    const IndexOfLastItem = this.state.currentPage * this.state.itemPerPage;
-    const IndexOfFirstItem = IndexOfLastItem - this.state.itemPerPage;
-
-    const limitCard = this.state.items
+    const limitCard = this.props.data
       .filter(i => {
         const word = this.state.searchWord;
         if (!word) {
@@ -76,8 +59,7 @@ class TopPage extends React.Component {
       })
       .sort((p, n) => {
         return -(get_timestamp(p.created_at) - get_timestamp(n.created_at));
-      })
-      .slice(IndexOfFirstItem, IndexOfLastItem);
+      });
 
     const CardList = limitCard.map(i => (
       <Card
@@ -86,29 +68,9 @@ class TopPage extends React.Component {
         title={i.title}
         comment={i.comment}
         url={i.url}
-        getLinkData={() => this.getLinkData()}
+        getLinkData={() => this.props.fetchLinkCard()}
       />
     ));
-
-    const PagenationBtn = [];
-    for (
-      let i = 1;
-      i <= Math.ceil(this.state.items.length / this.state.itemPerPage);
-      i++
-    ) {
-      PagenationBtn.push(i);
-    }
-    const RenderPagenationBtn = PagenationBtn.map(n => (
-      <li
-        key={n}
-        id={n}
-        onClick={e => this.pageNumClick(e)}
-        style={styles.pageBtn}
-      >
-        {n}
-      </li>
-    ));
-
     return (
       <>
         <input
@@ -118,7 +80,7 @@ class TopPage extends React.Component {
           placeholder="検索"
         />
         <ul style={styles.ul}>{CardList}</ul>
-        <ul style={styles.ul}>{RenderPagenationBtn}</ul>
+        <PaginationBtn />
       </>
     );
   }
@@ -129,13 +91,25 @@ const styles = {
     display: "flex",
     flexWrap: "wrap",
     listStyleType: "none"
-  },
-  pageBtn: {
-    padding: "0.25em 0.5em",
-    margin: "0.1em",
-    border: "1px solid blue",
-    color: "blue"
   }
 };
 
-export default withRouter(TopPage);
+const mapStateToProps = state => {
+  const paginationObj = state.pagination;
+  const lastItem = paginationObj.currentPage * paginationObj.itemPerPage;
+  const firstItem = lastItem - paginationObj.itemPerPage;
+  return {
+    data: state.linkCards.data.slice(firstItem, lastItem)
+  };
+};
+
+const mapToDispatchProps = dispatch => {
+  return bindActionCreators({ fetchLinkCard }, dispatch);
+};
+
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapToDispatchProps
+  )(TopPage)
+);

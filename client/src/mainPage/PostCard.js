@@ -1,4 +1,6 @@
 import React from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 import { withRouter, Link } from "react-router-dom";
 import request from "superagent";
 import {
@@ -10,6 +12,8 @@ import {
   PostDiv,
   Button
 } from "../components/style.js";
+
+import { addLinkCard } from "../reducer/modules/linkCards";
 
 class PostCard extends React.Component {
   constructor(props) {
@@ -30,19 +34,11 @@ class PostCard extends React.Component {
   }
 
   post() {
-    request
-      .post("/api/createLink")
-      .send({
-        title: this.state.title,
-        comment: this.state.comment,
-        url: this.state.url
-      })
-      .end((err, data) => {
-        if (err) {
-          console.error(err);
-          return;
-        }
-      });
+    this.props.addLinkCard({
+      title: this.state.title,
+      comment: this.state.comment,
+      url: this.state.url
+    });
     this.props.history.push("/");
   }
 
@@ -75,15 +71,6 @@ class PostCard extends React.Component {
       sendTitleCheck = "ok";
     }
 
-    // switch(alertTitleType) {
-    //   case "long":
-    //     msgTitle = <p style={displayStyle}>*20文字以内</p>
-    //   case "none":
-    //     msgTitle = <p></p>
-    //   case "short":
-    //     msgTitle = <p style={displayStyle}>*必須</p>
-    // }
-
     if (this.state.url === "") {
       msgUrl = <p style={displayStyle}>*必須</p>;
       sendUrlCheck = "ng";
@@ -94,13 +81,6 @@ class PostCard extends React.Component {
       msgUrl = <p style={displayStyle}>リンクを貼ってください</p>;
       sendUrlCheck = "ng";
     }
-
-    // switch(alertUrlType) {
-    //   case true:
-    //     msgUrl = <p style={displayStyle}>*必須</p>
-    //   case false:
-    //     msgUrl = <p></p>
-    // }
 
     if (
       this.state.title &&
@@ -178,6 +158,14 @@ class PostCard extends React.Component {
   }
 }
 
+const mapStateToProps = state => {
+  return { isFetching: state.linkCards.isFetching };
+};
+
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators({ addLinkCard }, dispatch);
+};
+
 const styles = {
   Link: {
     display: "block",
@@ -190,4 +178,9 @@ const styles = {
   }
 };
 
-export default withRouter(PostCard);
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(PostCard)
+);
