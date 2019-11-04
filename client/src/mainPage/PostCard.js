@@ -4,13 +4,13 @@ import { bindActionCreators } from "redux";
 import { withRouter, Link } from "react-router-dom";
 import {
   FromName,
-  InputName,
-  InputWrapper,
-  PostInput,
+  PostWrapper,
   CenterDiv,
   PostDiv,
   Button
 } from "../components/style.js";
+
+import Input from "../Functional/Input";
 
 import { addLinkCard } from "../reducer/modules/linkCards";
 
@@ -22,6 +22,7 @@ class PostCard extends React.Component {
       comment: "",
       url: ""
     };
+    this.handleChange = this.handleChange.bind(this);
   }
 
   handleChange(e) {
@@ -101,49 +102,36 @@ class PostCard extends React.Component {
 
     return (
       <>
-        <PostDiv>
-          <label>
-            <FromName>新規投稿</FromName>
-
-            <InputName>見出し</InputName>
-            <InputWrapper>
-              <PostInput
-                type="text"
-                value={this.state.title}
-                name="title"
-                onChange={e => this.handleChange(e)}
-              />
-              {msgTitle}
-            </InputWrapper>
-          </label>
+        <PostWrapper>
+          <FromName>新規投稿</FromName>
+          <Input
+            inputName="見出し"
+            type="text"
+            value={this.state.title}
+            name="title"
+            handleChange={this.handleChange}
+            errMsg={msgTitle}
+          />
           <br />
-          <label>
-            <InputName>コメント</InputName>
-            <InputWrapper>
-              <PostInput
-                type="text"
-                value={this.state.comment}
-                name="comment"
-                onChange={e => this.handleChange(e)}
-              />
-            </InputWrapper>
-          </label>
+          <Input
+            inputName="コメント"
+            type="text"
+            value={this.state.comment}
+            name="comment"
+            handleChange={this.handleChange}
+          />
           <br />
-          <label>
-            <InputName>URL</InputName>
-            <InputWrapper>
-              <PostInput
-                type="text"
-                value={this.state.url}
-                name="url"
-                onChange={e => this.handleChange(e)}
-              />
-              {msgUrl}
-            </InputWrapper>
-          </label>
+          <Input
+            inputName="URL"
+            type="text"
+            value={this.state.url}
+            name="url"
+            handleChange={this.handleChange}
+            errMsg={msgUrl}
+          />
           <br />
           <CenterDiv>{sendBtn}</CenterDiv>
-        </PostDiv>
+        </PostWrapper>
         <Link to="/" style={styles.Link}>
           キャンセル
         </Link>
