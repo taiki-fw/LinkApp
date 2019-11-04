@@ -2,11 +2,10 @@ import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { withRouter, Link } from "react-router-dom";
-import request from "superagent";
 import {
-  H3,
-  H2,
-  RowDiv,
+  FromName,
+  InputName,
+  InputWrapper,
   PostInput,
   CenterDiv,
   PostDiv,
@@ -104,48 +103,43 @@ class PostCard extends React.Component {
       <>
         <PostDiv>
           <label>
-            <H2>新規投稿</H2>
-            <CenterDiv>
-              <RowDiv>
-                <H3>見出し</H3>
-                {msgTitle}
-              </RowDiv>
+            <FromName>新規投稿</FromName>
+
+            <InputName>見出し</InputName>
+            <InputWrapper>
               <PostInput
                 type="text"
                 value={this.state.title}
                 name="title"
                 onChange={e => this.handleChange(e)}
               />
-            </CenterDiv>
+              {msgTitle}
+            </InputWrapper>
           </label>
           <br />
           <label>
-            <RowDiv>
-              <H3>コメント</H3>
-            </RowDiv>
-            <CenterDiv>
+            <InputName>コメント</InputName>
+            <InputWrapper>
               <PostInput
                 type="text"
                 value={this.state.comment}
                 name="comment"
                 onChange={e => this.handleChange(e)}
               />
-            </CenterDiv>
+            </InputWrapper>
           </label>
           <br />
           <label>
-            <RowDiv>
-              <H3>URL</H3>
-              {msgUrl}
-            </RowDiv>
-            <CenterDiv>
+            <InputName>URL</InputName>
+            <InputWrapper>
               <PostInput
                 type="text"
                 value={this.state.url}
                 name="url"
                 onChange={e => this.handleChange(e)}
               />
-            </CenterDiv>
+              {msgUrl}
+            </InputWrapper>
           </label>
           <br />
           <CenterDiv>{sendBtn}</CenterDiv>
