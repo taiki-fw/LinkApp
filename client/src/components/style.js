@@ -31,16 +31,3 @@ export const PostWrapper = styled.div`
     height: 350px;
   }
 `;
-export const Button = styled.button`
-  font-size: 1.2em;
-  padding: 10px 30px;
-  border-radius: 5px;
-  background-color: #0d3f67;
-  color: white;
-  font-weight: bold;
-  @media (max-width: 700px) {
-    font-weight: normal;
-    font-size: 1em;
-    padding: 5px 20px;
-  }
-`;

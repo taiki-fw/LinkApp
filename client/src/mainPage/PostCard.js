@@ -2,15 +2,10 @@ import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { withRouter, Link } from "react-router-dom";
-import {
-  FromName,
-  PostWrapper,
-  CenterDiv,
-  PostDiv,
-  Button
-} from "../components/style.js";
+import { FromName, PostWrapper, CenterDiv } from "../components/style.js";
 
 import Input from "../Functional/Input";
+import SubmitBtn from "../Functional/Submit";
 
 import { addLinkCard } from "../reducer/modules/linkCards";
 
@@ -23,6 +18,7 @@ class PostCard extends React.Component {
       url: ""
     };
     this.handleChange = this.handleChange.bind(this);
+    this.post = this.post.bind(this);
   }
 
   handleChange(e) {
@@ -51,7 +47,6 @@ class PostCard extends React.Component {
     let msgUrl = null;
     let sendDisable = true;
     let sendUrlCheck = "ng";
-    let sendBtn = null;
     let sendTitleCheck = "ng";
     let maxLength = 20;
     let minLength = 0;
@@ -93,13 +88,6 @@ class PostCard extends React.Component {
       sendDisable = true;
     }
 
-    sendBtn = (
-      <Button id="formBtn" onClick={e => this.post()} disabled={sendDisable}>
-        {" "}
-        送信
-      </Button>
-    );
-
     return (
       <>
         <PostWrapper>
@@ -130,7 +118,9 @@ class PostCard extends React.Component {
             errMsg={msgUrl}
           />
           <br />
-          <CenterDiv>{sendBtn}</CenterDiv>
+          <CenterDiv>
+            <SubmitBtn handleSubmit={this.post} isDisabled={sendDisable} />
+          </CenterDiv>
         </PostWrapper>
         <Link to="/" style={styles.Link}>
           キャンセル
