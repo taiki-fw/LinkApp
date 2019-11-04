@@ -7,11 +7,13 @@ import Application from "./Apps";
 import store from "./store/store";
 import "./reset.css";
 
-const App = () => (
-  <Provider store={store}>
-    <Application />
-  </Provider>
-);
+function App() {
+  return (
+    <Provider store={store}>
+      <Application />
+    </Provider>
+  );
+}
 
 ReactDOM.render(<App />, document.getElementById("root"));
 
