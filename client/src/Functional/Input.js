@@ -5,6 +5,7 @@ const responsiveFontSize = 12;
 
 export default function Input({
   inputName,
+  need,
   type,
   value,
   name,
@@ -13,14 +14,17 @@ export default function Input({
 }) {
   return (
     <label>
-      <InputName>{inputName}</InputName>
+      <InputName>
+        {inputName}
+        <Need need={need}>{need ? "必須" : ""}</Need>
+      </InputName>
       <PostInput
         type={type}
         value={value}
         name={name}
         onChange={e => handleChange(e)}
       />
-      {errMsg}
+      <Error>{errMsg}</Error>
     </label>
   );
 }
@@ -32,6 +36,14 @@ const InputName = styled.h3`
   }
 `;
 
+const Need = styled.span`
+  color: red;
+  margin-left: 0.5em;
+  border-width: ${props => (props.need ? "1px" : "0px")};
+  border-style: solid;
+  border-color: red;
+`;
+
 const PostInput = styled.input`
   font-size: 1em;
   width: 100%;
@@ -41,4 +53,10 @@ const PostInput = styled.input`
     font-size: ${responsiveFontSize}px;
     padding: 0.5em 0 0.5em 0.25em;
   }
+`;
+
+const Error = styled.p`
+  color: red;
+  background-color: #fff00000;
+  height: 1em;
 `;

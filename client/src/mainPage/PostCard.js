@@ -15,17 +15,56 @@ class PostCard extends React.Component {
     this.state = {
       title: "",
       comment: "",
-      url: ""
+      url: "",
+      errorMessage: {
+        title: "",
+        url: ""
+      },
+      isDisabled: true
     };
     this.handleChange = this.handleChange.bind(this);
     this.post = this.post.bind(this);
   }
 
+  checkTitle(value) {
+    const maxLength = 20;
+    if (value.length > maxLength) {
+      return `20文字以内にしてください。(現在${value.length}文字))`;
+    } else if (value.length <= 0) {
+      return `必須項目に必ずご記入ください`;
+    }
+  }
+
+  checkUrl(value) {
+    const regex = new RegExp(
+      /^https?(:\/\/[-_.!~*'()a-zA-Z0-9;/?:@&=+$,%#]+)$/
+    );
+
+    if (value.length <= 0) {
+      return `必須項目に必ずご記入ください`;
+    } else if (!regex.test(this.state.url)) {
+      return "リンクを貼ってください";
+    }
+  }
+
   handleChange(e) {
     const newValue = e.target.value;
     const name = e.target.name;
+    const errorMessage = {
+      title: "",
+      url: ""
+    };
+    switch (name) {
+      case "title":
+        errorMessage["title"] = this.checkTitle(newValue);
+        break;
+      case "url":
+        errorMessage["url"] = this.checkUrl(newValue);
+        break;
+    }
     this.setState({
-      [name]: newValue
+      [name]: newValue,
+      errorMessage: errorMessage
     });
   }
 
@@ -39,53 +78,11 @@ class PostCard extends React.Component {
   }
 
   render() {
-    const displayStyle = {
-      color: "red",
-      fontSize: "5px"
-    };
-    let msgTitle = null;
-    let msgUrl = null;
     let sendDisable = true;
-    let sendUrlCheck = "ng";
-    let sendTitleCheck = "ng";
-    let maxLength = 20;
-    let minLength = 0;
-    let titleLength = this.state.title.length;
-    let checkUrl = this.state.url.match(
-      /^https?(:\/\/[-_.!~*'()a-zA-Z0-9;/?:@&=+$,%#]+)$/
-    );
-
-    if (titleLength > maxLength) {
-      msgTitle = <p style={displayStyle}>*20文字以内</p>;
-      sendTitleCheck = "ng";
-    } else if (titleLength <= minLength) {
-      msgTitle = <p style={displayStyle}>*必須</p>;
-      sendTitleCheck = "ng";
-    } else {
-      msgTitle = <p></p>;
-      sendTitleCheck = "ok";
-    }
-
-    if (this.state.url === "") {
-      msgUrl = <p style={displayStyle}>*必須</p>;
-      sendUrlCheck = "ng";
-    } else if (checkUrl !== null) {
-      msgUrl = <p></p>;
-      sendUrlCheck = "ok";
-    } else {
-      msgUrl = <p style={displayStyle}>リンクを貼ってください</p>;
-      sendUrlCheck = "ng";
-    }
-
-    if (
-      this.state.title &&
-      this.state.url &&
-      sendTitleCheck === "ok" &&
-      sendUrlCheck === "ok"
-    ) {
-      sendDisable = false;
-    } else {
+    if (!(this.state.errorMessage.title && this.state.errorMessage.url)) {
       sendDisable = true;
+    } else {
+      sendDisable = false;
     }
 
     return (
@@ -94,11 +91,12 @@ class PostCard extends React.Component {
           <FromName>新規投稿</FromName>
           <Input
             inputName="見出し"
+            need={true}
             type="text"
             value={this.state.title}
             name="title"
             handleChange={this.handleChange}
-            errMsg={msgTitle}
+            errMsg={this.state.errorMessage.title}
           />
           <br />
           <Input
@@ -111,11 +109,12 @@ class PostCard extends React.Component {
           <br />
           <Input
             inputName="URL"
+            need={true}
             type="text"
             value={this.state.url}
             name="url"
             handleChange={this.handleChange}
-            errMsg={msgUrl}
+            errMsg={this.state.errorMessage.url}
           />
           <br />
           <CenterDiv>
