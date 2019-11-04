@@ -163,7 +163,8 @@ const styles = {
     color: "#0D3F67",
     backgroundColor: "#fff",
     borderRadius: "5px",
-    textAlign: "center"
+    textAlign: "center",
+    backgroundColor: "#EDF0F2",
   },
 
 };

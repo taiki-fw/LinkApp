@@ -38,6 +38,8 @@ export const PostInput = styled.input`
  margin-bottom: 10px;
  border-radius: 5px;
  font-size: 1.1rem;
+ border-style: none;
+ border: 1px solid gray;
  @media (max-width:700px){
     padding: 8px 0;
     margin-bottom: 0;
@@ -58,9 +60,9 @@ export const PostDiv = styled.div`
  width: 500px;
  height: 500px;
  padding: 20px;
- border: 0.5px solid #F5F7F9;
+ border: 0.5px solid #420000;
  border-radius: 10px;
- background-color: #F2F4F6;
+ background-color: #d4d7dd;
   @media (max-width:700px){
      width: 80%;
      height: 350px;
@@ -73,6 +75,10 @@ export const Button = styled.button`
  background-color: #0D3F67;
  color: white;
  font-weight: bold;
+ :hover {
+     opacity: 0.8;
+     cursor: pointer;
+ }
  @media (max-width:700px){
      font-weight: normal;
      font-size: 1em;
@@ -87,11 +93,10 @@ export const Li = styled.li`
  margin: 20px 30px;
  padding: 1em;
  transition: 0.2s;
- background-color: #EDF0F2;
+ background-color: white;
  display: inline;
  :hover {
      box-shadow: 8px 8px 8px #999;
-     transform: scale(1.1);
      cursor: pointer;
  }
  @media(max-width:1040px){
@@ -118,6 +123,7 @@ export const CardH3 = styled.h3`
 export const CardP = styled.p`
  padding: 5px;
  text-align: left;
+ color: black;
  @media(max-width:700px){
      font-size: 10px;
  }
@@ -162,6 +168,14 @@ export const EditButton = styled.button`
  z-index: 2;
  right: 0;
  bottom: 5px;
+ border-style: none;
+ border: 1px solid black;
+ 
+ :hover {
+    cursor: pointer;
+    background-color: gray;
+    color: white;
+ }
  @media (max-width:700px) {
     font-size: 10px;
  }
