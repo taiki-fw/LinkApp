@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { withRouter, Link } from "react-router-dom";
 import styled from "styled-components";
-import { FromName, PostWrapper } from "../components/style.js";
 
 import Input from "../Functional/Input";
 import SubmitBtn from "../Functional/Submit";
@@ -153,6 +152,28 @@ export default withRouter(
     mapDispatchToProps
   )(PostCard)
 );
+
+const FromName = styled.h2`
+  text-align: center;
+  margin-bottom: 10px;
+  color: #0d3f67;
+  @media (max-width: 700px) {
+    font-size: 16px;
+  }
+`;
+
+const PostWrapper = styled.div`
+  margin: 100px auto 50px;
+  width: 500px;
+  padding: 20px 40px;
+  border: 0.5px solid #f5f7f9;
+  border-radius: 10px;
+  background-color: #f2f4f6;
+  @media (max-width: 700px) {
+    width: 80%;
+    height: 350px;
+  }
+`;
 
 const Cancel = styled(Link)`
   display: inline-block;
