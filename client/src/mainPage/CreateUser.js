@@ -2,6 +2,8 @@ import React from "react";
 import { Link, withRouter } from "react-router-dom";
 import request from "superagent";
 
+import Input from "../Functional/Input";
+
 class CreateUser extends React.Component {
   constructor(props) {
     super(props);
@@ -11,6 +13,7 @@ class CreateUser extends React.Component {
       password: "",
       errMsg: ""
     };
+    this.handleChange = this.handleChange.bind(this);
   }
 
   handleChange(e) {
@@ -58,40 +61,27 @@ class CreateUser extends React.Component {
       <>
         <h1>Welcome</h1>
         <form onSubmit={e => this.formSubmit(e)}>
-          <label>
-            名前
-            <br />
-            <input
-              type="text"
-              name="name"
-              value={this.state.name}
-              onChange={e => this.handleChange(e)}
-            />
-            <br />
-          </label>
-          <label>
-            メールアドレス
-            <br />
-            <input
-              type="email"
-              name="email"
-              value={this.state.email}
-              onChange={e => this.handleChange(e)}
-            />
-            <br />
-            {errMsg}
-          </label>
-          <label>
-            パスワード
-            <br />
-            <input
-              type="password"
-              name="password"
-              value={this.state.password}
-              onChange={e => this.handleChange(e)}
-            />
-            <br />
-          </label>
+          <Input
+            inputName="名前"
+            type="text"
+            name="name"
+            value={this.state.name}
+            handleChange={this.handleChange}
+          />
+          <Input
+            inputName="メールアドレス"
+            type="email"
+            name="email"
+            value={this.state.email}
+            handleChange={this.handleChange}
+          />
+          <Input
+            inputName="パスワード"
+            type="password"
+            name="password"
+            value={this.state.password}
+            handleChange={this.handleChange}
+          />
           <input type="submit" value="登録" />
         </form>
         <p>
