@@ -3,12 +3,12 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import noMatch from "./noMatch.js";
 
-import Header from "./components/Header";
-import PostCard from "./mainPage/PostCard";
-import TopPage from "./mainPage/TopPage";
-import CreateUser from "./mainPage/CreateUser";
-import Login from "./mainPage/Login";
-import Users from "./mainPage/Users";
+import Header from "./Container/Header";
+import PostCard from "./Container/PostCard";
+import TopPage from "./Container/TopPage";
+import CreateUser from "./Container/CreateUser";
+import Login from "./Container/Login";
+import Users from "./Container/Users";
 
 const Application = () => (
   <Router>

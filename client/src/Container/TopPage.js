@@ -6,7 +6,7 @@ import request from "superagent";
 
 import { fetchLinkCard } from "../reducer/modules/linkCards";
 import PaginationBtn from "../Functional/pagination";
-import Card from "../components/Card";
+import Card from "../Functional/Card";
 
 function get_timestamp(_date) {
   var _d = _date ? new Date(_date) : new Date();
