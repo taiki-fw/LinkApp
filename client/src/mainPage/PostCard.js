@@ -2,7 +2,8 @@ import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { withRouter, Link } from "react-router-dom";
-import { FromName, PostWrapper, CenterDiv } from "../components/style.js";
+import styled from "styled-components";
+import { FromName, PostWrapper } from "../components/style.js";
 
 import Input from "../Functional/Input";
 import SubmitBtn from "../Functional/Submit";
@@ -94,48 +95,46 @@ class PostCard extends React.Component {
 
   render() {
     return (
-      <>
-        <PostWrapper>
-          <FromName>新規投稿</FromName>
-          <Input
-            inputName="見出し"
-            need={true}
-            type="text"
-            value={this.state.title}
-            name="title"
-            handleChange={this.handleChange}
-            errMsg={this.state.errorMessage.title}
+      <PostWrapper>
+        <FromName>新規投稿</FromName>
+        <Input
+          inputName="見出し"
+          need={true}
+          type="text"
+          value={this.state.title}
+          name="title"
+          handleChange={this.handleChange}
+          errMsg={this.state.errorMessage.title}
+        />
+        <br />
+        <Input
+          inputName="コメント"
+          type="text"
+          value={this.state.comment}
+          name="comment"
+          handleChange={this.handleChange}
+        />
+        <br />
+        <Input
+          inputName="URL"
+          need={true}
+          type="text"
+          value={this.state.url}
+          name="url"
+          handleChange={this.handleChange}
+          errMsg={this.state.errorMessage.url}
+        />
+        <br />
+        <div style={{ textAlign: "center", marginBottom: "1em" }}>
+          <SubmitBtn
+            handleSubmit={this.post}
+            isDisabled={this.state.isDisabled}
           />
-          <br />
-          <Input
-            inputName="コメント"
-            type="text"
-            value={this.state.comment}
-            name="comment"
-            handleChange={this.handleChange}
-          />
-          <br />
-          <Input
-            inputName="URL"
-            need={true}
-            type="text"
-            value={this.state.url}
-            name="url"
-            handleChange={this.handleChange}
-            errMsg={this.state.errorMessage.url}
-          />
-          <br />
-          <CenterDiv>
-            <SubmitBtn
-              handleSubmit={this.post}
-              isDisabled={this.state.isDisabled}
-            />
-          </CenterDiv>
-        </PostWrapper>
-        <Link to="/" style={styles.Link}>
-          キャンセル
-        </Link>
-      </>
+        </div>
+        <div style={{ textAlign: "center" }}>
+          <Cancel to="/">キャンセル</Cancel>
+        </div>
+      </PostWrapper>
     );
   }
 }
@@ -148,21 +147,16 @@ const mapDispatchToProps = dispatch => {
   return bindActionCreators({ addLinkCard }, dispatch);
 };
 
-const styles = {
-  Link: {
-    display: "block",
-    textDecoration: "none",
-    color: "#0D3F67",
-    backgroundColor: "#fff",
-    borderRadius: "5px",
-    padding: "0.5em 1.5em 0.5em 0",
-    textAlign: "center"
-  }
-};
-
 export default withRouter(
   connect(
     mapStateToProps,
     mapDispatchToProps
   )(PostCard)
 );
+
+const Cancel = styled(Link)`
+  display: inline-block;
+  text-decoration: none;
+  color: #0d3f67;
+  text-align: center;
+`;
