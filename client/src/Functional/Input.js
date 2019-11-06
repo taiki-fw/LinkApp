@@ -7,8 +7,8 @@ export default function Input({
   inputName,
   need,
   type,
-  value,
   name,
+  value,
   handleChange,
   errMsg
 }) {
@@ -20,8 +20,8 @@ export default function Input({
       </InputName>
       <PostInput
         type={type}
-        value={value}
         name={name}
+        value={value}
         onChange={e => handleChange(e)}
       />
       <Error>{errMsg}</Error>

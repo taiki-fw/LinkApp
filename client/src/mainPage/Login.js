@@ -2,6 +2,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import request from "superagent";
 
+import Input from "../Functional/Input";
+
 export default class Login extends React.Component {
   constructor(props) {
     super(props);
@@ -9,6 +11,7 @@ export default class Login extends React.Component {
       email: "",
       password: ""
     };
+    this.handleChange = this.handleChange.bind(this);
   }
   handleChange(e) {
     const newValue = e.target.value;
@@ -47,28 +50,22 @@ export default class Login extends React.Component {
       <>
         <h1>Welcome Home</h1>
         <form onSubmit={e => this.Submit(e)}>
-          <label>
-            メールアドレス
-            <br />
-            <input
-              type="email"
-              name="email"
-              value={this.state.email}
-              onChange={e => this.handleChange(e)}
-            />
-            <br />
-          </label>
-          <label>
-            パスワード
-            <br />
-            <input
-              type="password"
-              name="password"
-              value={this.state.password}
-              onChange={e => this.handleChange(e)}
-            />
-            <br />
-          </label>
+          <Input
+            inputName="メールアドレス"
+            need={false}
+            type="email"
+            name="email"
+            value={this.state.email}
+            handleChange={this.handleChange}
+          />
+          <Input
+            inputName="パスワード"
+            need={false}
+            type="password"
+            name="password"
+            value={this.state.password}
+            handleChange={this.handleChange}
+          />
           <input type="submit" value="Login" />
         </form>
         <p>
