@@ -2,6 +2,10 @@ import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { withRouter, Link } from "react-router-dom";
+import styled from "styled-components";
+
+import Input from "../Functional/Input";
+import SubmitBtn from "../Functional/Submit";
 
 import { addLinkCard } from "../reducer/modules/linkCards";
 
@@ -11,127 +15,125 @@ class PostCard extends React.Component {
     this.state = {
       title: "",
       comment: "",
-      url: ""
+      url: "",
+      errorMessage: {
+        title: "",
+        url: ""
+      },
+      isDisabled: false
     };
+    this.handleChange = this.handleChange.bind(this);
+    this.post = this.post.bind(this);
+  }
+
+  checkTitle(value) {
+    const maxLength = 20;
+    if (value.length > maxLength) {
+      return `20文字以内にしてください。(現在${value.length}文字))`;
+    } else if (value.length <= 0) {
+      return `必須項目に必ずご記入ください`;
+    } else return "";
+  }
+
+  checkUrl(value) {
+    const regex = new RegExp(
+      /^https?(:\/\/[-_.!~*'()a-zA-Z0-9;/?:@&=+$,%#]+)$/
+    );
+
+    if (value.length <= 0) {
+      return `必須項目に必ずご記入ください`;
+    } else if (!regex.test(value)) {
+      return "リンクを貼ってください";
+    } else return "";
   }
 
   handleChange(e) {
     const newValue = e.target.value;
     const name = e.target.name;
+    const errorMessage = this.state.errorMessage;
+    switch (name) {
+      case "title":
+        errorMessage["title"] = this.checkTitle(newValue);
+        break;
+      case "url":
+        errorMessage["url"] = this.checkUrl(newValue);
+        break;
+      default:
+        break;
+    }
     this.setState({
-      [name]: newValue
+      [name]: newValue,
+      errorMessage: errorMessage,
+      isDisabled: errorMessage.title && errorMessage.url
     });
   }
 
   post() {
-    this.props.addLinkCard({
-      title: this.state.title,
-      comment: this.state.comment,
-      url: this.state.url
-    });
-    this.props.history.push("/");
+    const state = this.state;
+    if (
+      state.title &&
+      state.url &&
+      !(state.errorMessage.title && state.errorMessage.url)
+    ) {
+      this.props.addLinkCard({
+        title: this.state.title,
+        comment: this.state.comment,
+        url: this.state.url
+      });
+      this.props.history.push("/");
+    } else {
+      this.setState({
+        errorMessage: {
+          title: this.checkTitle(this.state.title),
+          url: this.checkUrl(this.state.url)
+        },
+        isDisabled: true
+      });
+    }
   }
 
   render() {
-    const displayStyle = {
-      color: "red",
-      fontSize: "5px"
-    };
-    let msgTitle = null;
-    let msgUrl = null;
-    let sendDisable = true;
-    let sendUrlCheck = "ng";
-    let sendBtn = null;
-    let sendTitleCheck = "ng";
-    let maxLength = 20;
-    let minLength = 0;
-    let titleLength = this.state.title.length;
-    let checkUrl = this.state.url.match(
-      /^https?(:\/\/[-_.!~*'()a-zA-Z0-9;/?:@&=+$,%#]+)$/
-    );
-
-    if (titleLength > maxLength) {
-      msgTitle = <p style={displayStyle}>*20文字以内</p>;
-      sendTitleCheck = "ng";
-    } else if (titleLength <= minLength) {
-      msgTitle = <p style={displayStyle}>*必須</p>;
-      sendTitleCheck = "ng";
-    } else {
-      msgTitle = <p></p>;
-      sendTitleCheck = "ok";
-    }
-
-    if (this.state.url === "") {
-      msgUrl = <p style={displayStyle}>*必須</p>;
-      sendUrlCheck = "ng";
-    } else if (checkUrl !== null) {
-      msgUrl = <p></p>;
-      sendUrlCheck = "ok";
-    } else {
-      msgUrl = <p style={displayStyle}>リンクを貼ってください</p>;
-      sendUrlCheck = "ng";
-    }
-
-    if (
-      this.state.title &&
-      this.state.url &&
-      sendTitleCheck === "ok" &&
-      sendUrlCheck === "ok"
-    ) {
-      sendDisable = false;
-    } else {
-      sendDisable = true;
-    }
-
-    sendBtn = (
-      <button id="formBtn" onClick={e => this.post()} disabled={sendDisable}>
-        {" "}
-        送信
-      </button>
-    );
-
     return (
-      <>
-        <Link to="/" style={styles.Link}>
-          キャンセル
-        </Link>
-        <label>
-          見出し
-          <br />
-          {msgTitle}
-          <input
-            type="text"
-            value={this.state.title}
-            name="title"
-            onChange={e => this.handleChange(e)}
-          />
-        </label>
+      <PostWrapper>
+        <FromName>新規投稿</FromName>
+        <Input
+          inputName="見出し"
+          need={true}
+          type="text"
+          value={this.state.title}
+          name="title"
+          handleChange={this.handleChange}
+          errMsg={this.state.errorMessage.title}
+        />
         <br />
-        <label>
-          コメント
-          <br />
-          <input
-            type="text"
-            value={this.state.comment}
-            name="comment"
-            onChange={e => this.handleChange(e)}
-          />
-        </label>
+        <Input
+          inputName="コメント"
+          type="text"
+          value={this.state.comment}
+          name="comment"
+          handleChange={this.handleChange}
+        />
         <br />
-        <label>
-          URL
-          <br />
-          {msgUrl}
-          <input
-            type="text"
-            value={this.state.url}
-            name="url"
-            onChange={e => this.handleChange(e)}
-          />
-        </label>
+        <Input
+          inputName="URL"
+          need={true}
+          type="text"
+          value={this.state.url}
+          name="url"
+          handleChange={this.handleChange}
+          errMsg={this.state.errorMessage.url}
+        />
         <br />
-        {sendBtn}
-      </>
+        <div style={{ textAlign: "center", marginBottom: "1em" }}>
+          <SubmitBtn
+            handleSubmit={this.post}
+            isDisabled={this.state.isDisabled}
+          />
+        </div>
+        <div style={{ textAlign: "center" }}>
+          <Cancel to="/">キャンセル</Cancel>
+        </div>
+      </PostWrapper>
     );
   }
 }
@@ -144,20 +146,38 @@ const mapDispatchToProps = dispatch => {
   return bindActionCreators({ addLinkCard }, dispatch);
 };
 
-const styles = {
-  Link: {
-    display: "block",
-    textDecoration: "none",
-    color: "#0D3F67",
-    backgroundColor: "#fff",
-    borderRadius: "5px",
-    padding: "0.5em 1.5em 0.5em 0"
-  }
-};
-
 export default withRouter(
   connect(
     mapStateToProps,
     mapDispatchToProps
   )(PostCard)
 );
+
+const FromName = styled.h2`
+  text-align: center;
+  margin-bottom: 10px;
+  color: #0d3f67;
+  @media (max-width: 700px) {
+    font-size: 16px;
+  }
+`;
+
+const PostWrapper = styled.div`
+  margin: 100px auto 50px;
+  width: 500px;
+  padding: 20px 40px;
+  border: 0.5px solid #f5f7f9;
+  border-radius: 10px;
+  background-color: #f2f4f6;
+  @media (max-width: 700px) {
+    width: 80%;
+    height: 350px;
+  }
+`;
+
+const Cancel = styled(Link)`
+  display: inline-block;
+  text-decoration: none;
+  color: #0d3f67;
+  text-align: center;
+`;
