@@ -20,7 +20,7 @@ class PostCard extends React.Component {
         title: "",
         url: ""
       },
-      isDisabled: true
+      isDisabled: false
     };
     this.handleChange = this.handleChange.bind(this);
     this.post = this.post.bind(this);
@@ -32,7 +32,7 @@ class PostCard extends React.Component {
       return `20文字以内にしてください。(現在${value.length}文字))`;
     } else if (value.length <= 0) {
       return `必須項目に必ずご記入ください`;
-    }
+    } else return "";
   }
 
   checkUrl(value) {
@@ -42,18 +42,15 @@ class PostCard extends React.Component {
 
     if (value.length <= 0) {
       return `必須項目に必ずご記入ください`;
-    } else if (!regex.test(this.state.url)) {
+    } else if (!regex.test(value)) {
       return "リンクを貼ってください";
-    }
+    } else return "";
   }
 
   handleChange(e) {
     const newValue = e.target.value;
     const name = e.target.name;
-    const errorMessage = {
-      title: "",
-      url: ""
-    };
+    const errorMessage = this.state.errorMessage;
     switch (name) {
       case "title":
         errorMessage["title"] = this.checkTitle(newValue);
@@ -61,30 +58,41 @@ class PostCard extends React.Component {
       case "url":
         errorMessage["url"] = this.checkUrl(newValue);
         break;
+      default:
+        break;
     }
     this.setState({
       [name]: newValue,
-      errorMessage: errorMessage
+      errorMessage: errorMessage,
+      isDisabled: errorMessage.title && errorMessage.url
     });
   }
 
   post() {
-    this.props.addLinkCard({
-      title: this.state.title,
-      comment: this.state.comment,
-      url: this.state.url
-    });
-    this.props.history.push("/");
+    const state = this.state;
+    if (
+      state.title &&
+      state.url &&
+      !(state.errorMessage.title && state.errorMessage.url)
+    ) {
+      this.props.addLinkCard({
+        title: this.state.title,
+        comment: this.state.comment,
+        url: this.state.url
+      });
+      this.props.history.push("/");
+    } else {
+      this.setState({
+        errorMessage: {
+          title: this.checkTitle(this.state.title),
+          url: this.checkUrl(this.state.url)
+        },
+        isDisabled: true
+      });
+    }
   }
 
   render() {
-    let sendDisable = true;
-    if (!(this.state.errorMessage.title && this.state.errorMessage.url)) {
-      sendDisable = true;
-    } else {
-      sendDisable = false;
-    }
-
     return (
       <>
         <PostWrapper>
@@ -118,7 +126,10 @@ class PostCard extends React.Component {
           />
           <br />
           <CenterDiv>
-            <SubmitBtn handleSubmit={this.post} isDisabled={sendDisable} />
+            <SubmitBtn
+              handleSubmit={this.post}
+              isDisabled={this.state.isDisabled}
+            />
           </CenterDiv>
         </PostWrapper>
         <Link to="/" style={styles.Link}>
