@@ -1,8 +1,5 @@
 version: "3"
 
-volumes:
-  pgdata:
-    driver: "local"
 services:
   postgres:
     image: postgres:11.4-alpine
@@ -12,5 +9,4 @@ services:
       POSTGRES_PASSWORD: ${POSTGRE_PASSWORD}
     ports:
       - ${POSTGRE_PORT}:${POSTGRE_PORT}
-    volumes:
-      [./DB/sql/:/docker-entrypoint-initdb.d#, pgdata:/var/lib/postgresql/data]
+    volumes: [./DB/sql/:/docker-entrypoint-initdb.d]
