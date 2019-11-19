@@ -57,8 +57,13 @@ class Card extends React.Component {
     return (
       <>
         {this.state.completed ? (
-          <li style={styles.li}>
-            <a href={this.state.url} style={styles.a} target="_blank">
+          <Li>
+            <a
+              href={this.state.url}
+              style={styles.a}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <h3>{this.state.title}</h3>
               <p>{this.state.comment}</p>
             </a>
@@ -71,7 +76,7 @@ class Card extends React.Component {
             >
               削除
             </button>
-          </li>
+          </Li>
         ) : (
           <li style={styles.li}>
             <input
@@ -159,5 +164,28 @@ const EditButton = styled.button`
   }
   @media (max-width: 700px) {
     font-size: 10px;
+  }
+`;
+export const Li = styled.li`
+  width: 200px;
+  height: 300px;
+  box-shadow: 4px 4px 4px #999;
+  margin: 20px 30px;
+  padding: 1em;
+  transition: 0.2s;
+  background-color: white;
+  display: inline-block;
+  :hover {
+    box-shadow: 8px 8px 8px #999;
+    cursor: pointer;
+  }
+  @media (max-width: 1040px) {
+    margin: 10px 20px;
+  }
+  @media (max-width: 700px) {
+    width: 100px;
+    height: 150px;
+    margin: 10px 10px;
+    padding: 5px;
   }
 `;
