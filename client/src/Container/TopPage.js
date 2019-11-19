@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { withRouter } from "react-router-dom";
+import styled from "styled-components";
 import request from "superagent";
 
 import { fetchLinkCard } from "../reducer/modules/linkCards";
@@ -79,20 +80,20 @@ class TopPage extends React.Component {
           value={this.state.searchWord}
           placeholder="検索"
         />
-        <ul style={styles.ul}>{CardList}</ul>
+        <CardUl>{CardList}</CardUl>
         <PaginationBtn />
       </>
     );
   }
 }
 
-const styles = {
-  ul: {
-    display: "flex",
-    flexWrap: "wrap",
-    listStyleType: "none"
-  }
-};
+const CardUl = styled.ul`
+  display: flex;
+  flex-flow: wrap row;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+`;
 
 const mapStateToProps = state => {
   const paginationObj = state.pagination;
@@ -108,8 +109,5 @@ const mapToDispatchProps = dispatch => {
 };
 
 export default withRouter(
-  connect(
-    mapStateToProps,
-    mapToDispatchProps
-  )(TopPage)
+  connect(mapStateToProps, mapToDispatchProps)(TopPage)
 );

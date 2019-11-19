@@ -1,3 +1,5 @@
+import "./reset.css";
+import "./style.css";
 import React from "react";
 import { Provider } from "react-redux";
 import ReactDOM from "react-dom";
@@ -5,7 +7,6 @@ import ReactDOM from "react-dom";
 import * as serviceWorker from "./serviceWorker";
 import Application from "./route";
 import store from "./store/store";
-import "./reset.css";
 
 function App() {
   return (

@@ -1,6 +1,7 @@
 import React from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
+import styled from "styled-components";
 
 import {
   asyncEditLinkCard,
@@ -43,35 +44,38 @@ class Card extends React.Component {
     const actionText = this.state.completed ? "編集" : "完了";
     const actionBtn = (
       <>
-        <button
-          style={styles.button}
+        <EditBtn
           onClick={() => {
             this.handleClick();
             this.props.getLinkData();
           }}
         >
           {actionText}
-        </button>
+        </EditBtn>
       </>
     );
     return (
       <>
         {this.state.completed ? (
-          <li style={styles.li}>
-            <a href={this.state.url} style={styles.a} target="_blank">
-              <h3>{this.state.title}</h3>
-              <p>{this.state.comment}</p>
+          <Li>
+            <a
+              href={this.state.url}
+              style={styles.a}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <h3 className="card__title">{this.state.title}</h3>
+              <p className="card__comment">{this.state.comment}</p>
             </a>
             {actionBtn}
-            <button
-              style={styles.buttonD}
+            <DeleteBtn
               onClick={() => {
                 this.props.asyncDeleteLinkCard(this.props.id);
               }}
             >
               削除
-            </button>
-          </li>
+            </DeleteBtn>
+          </Li>
         ) : (
           <li style={styles.li}>
             <input
@@ -109,29 +113,6 @@ const styles = {
     padding: "1em",
     margin: "0.5em",
     width: "25%"
-  },
-  a: {
-    display: "block",
-    textDecoration: "none",
-    color: "#0D3F67"
-  },
-  button: {
-    position: "absolute",
-    zIndex: "2",
-    left: "0",
-    bottom: "-2em",
-    border: "none",
-    padding: 0,
-    color: "#0D3F67"
-  },
-  buttonD: {
-    position: "absolute",
-    zIndex: "2",
-    right: "0",
-    bottom: "-2em",
-    border: "none",
-    padding: 0,
-    color: "#0D3F67"
   }
 };
 
@@ -142,7 +123,74 @@ const mapDispatchToProps = dispatch => {
   );
 };
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(Card);
+export default connect(null, mapDispatchToProps)(Card);
+
+const Btn = styled.button`
+  position: absolute;
+  z-index: 2;
+  bottom: 5px;
+  border-style: none;
+  border: 1px solid black;
+
+  :hover {
+    cursor: pointer;
+    background-color: gray;
+    color: white;
+  }
+  @media (max-width: 700px) {
+    font-size: 10px;
+  }
+`;
+
+const EditBtn = styled(Btn)`
+  left: 0;
+`;
+
+const DeleteBtn = styled(Btn)`
+  right: 0;
+`;
+
+export const Li = styled.li`
+  position: relative;
+  width: 200px;
+  height: 300px;
+  box-shadow: 4px 4px 4px #999;
+  margin: 20px 30px;
+  padding: 1em;
+  transition: 0.2s;
+  background-color: white;
+  display: inline-block;
+  :hover {
+    box-shadow: 8px 8px 8px #999;
+    cursor: pointer;
+  }
+  @media (max-width: 1040px) {
+    margin: 10px 20px;
+  }
+  @media (max-width: 700px) {
+    width: 100px;
+    height: 150px;
+    margin: 10px 10px;
+    padding: 5px;
+  }
+  a {
+    display: block;
+    text-decoration: none;
+    height: 100%;
+  }
+  .card__title {
+    color: #0d3f67;
+    text-align: center;
+    @media (max-width: 700px) {
+      font-size: 12px;
+      margin: 5px;
+    }
+  }
+  .card__comment {
+    text-align: left;
+    color: black;
+    @media (max-width: 700px) {
+      font-size: 10px;
+    }
+  }
+`;
