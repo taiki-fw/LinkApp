@@ -176,6 +176,7 @@ export const Li = styled.li`
   a {
     display: block;
     text-decoration: none;
+    height: 100%;
   }
   .card__title {
     color: #0d3f67;
