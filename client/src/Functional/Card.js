@@ -1,6 +1,7 @@
 import React from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
+import styled from "styled-components";
 
 import {
   asyncEditLinkCard,
@@ -43,15 +44,14 @@ class Card extends React.Component {
     const actionText = this.state.completed ? "編集" : "完了";
     const actionBtn = (
       <>
-        <button
-          style={styles.button}
+        <EditButton
           onClick={() => {
             this.handleClick();
             this.props.getLinkData();
           }}
         >
           {actionText}
-        </button>
+        </EditButton>
       </>
     );
     return (
@@ -142,7 +142,22 @@ const mapDispatchToProps = dispatch => {
   );
 };
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(Card);
+export default connect(null, mapDispatchToProps)(Card);
+
+const EditButton = styled.button`
+  position: absolute;
+  z-index: 2;
+  right: 0;
+  bottom: 5px;
+  border-style: none;
+  border: 1px solid black;
+
+  :hover {
+    cursor: pointer;
+    background-color: gray;
+    color: white;
+  }
+  @media (max-width: 700px) {
+    font-size: 10px;
+  }
+`;
