@@ -44,14 +44,14 @@ class Card extends React.Component {
     const actionText = this.state.completed ? "編集" : "完了";
     const actionBtn = (
       <>
-        <EditButton
+        <EditBtn
           onClick={() => {
             this.handleClick();
             this.props.getLinkData();
           }}
         >
           {actionText}
-        </EditButton>
+        </EditBtn>
       </>
     );
     return (
@@ -64,18 +64,17 @@ class Card extends React.Component {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <h3>{this.state.title}</h3>
-              <p>{this.state.comment}</p>
+              <h3 className="card__title">{this.state.title}</h3>
+              <p className="card__comment">{this.state.comment}</p>
             </a>
             {actionBtn}
-            <button
-              style={styles.buttonD}
+            <DeleteBtn
               onClick={() => {
                 this.props.asyncDeleteLinkCard(this.props.id);
               }}
             >
               削除
-            </button>
+            </DeleteBtn>
           </Li>
         ) : (
           <li style={styles.li}>
@@ -114,29 +113,6 @@ const styles = {
     padding: "1em",
     margin: "0.5em",
     width: "25%"
-  },
-  a: {
-    display: "block",
-    textDecoration: "none",
-    color: "#0D3F67"
-  },
-  button: {
-    position: "absolute",
-    zIndex: "2",
-    left: "0",
-    bottom: "-2em",
-    border: "none",
-    padding: 0,
-    color: "#0D3F67"
-  },
-  buttonD: {
-    position: "absolute",
-    zIndex: "2",
-    right: "0",
-    bottom: "-2em",
-    border: "none",
-    padding: 0,
-    color: "#0D3F67"
   }
 };
 
@@ -149,10 +125,9 @@ const mapDispatchToProps = dispatch => {
 
 export default connect(null, mapDispatchToProps)(Card);
 
-const EditButton = styled.button`
+const Btn = styled.button`
   position: absolute;
   z-index: 2;
-  right: 0;
   bottom: 5px;
   border-style: none;
   border: 1px solid black;
@@ -166,7 +141,17 @@ const EditButton = styled.button`
     font-size: 10px;
   }
 `;
+
+const EditBtn = styled(Btn)`
+  left: 0;
+`;
+
+const DeleteBtn = styled(Btn)`
+  right: 0;
+`;
+
 export const Li = styled.li`
+  position: relative;
   width: 200px;
   height: 300px;
   box-shadow: 4px 4px 4px #999;
@@ -187,5 +172,24 @@ export const Li = styled.li`
     height: 150px;
     margin: 10px 10px;
     padding: 5px;
+  }
+  a {
+    display: block;
+    text-decoration: none;
+  }
+  .card__title {
+    color: #0d3f67;
+    text-align: center;
+    @media (max-width: 700px) {
+      font-size: 12px;
+      margin: 5px;
+    }
+  }
+  .card__comment {
+    text-align: left;
+    color: black;
+    @media (max-width: 700px) {
+      font-size: 10px;
+    }
   }
 `;
