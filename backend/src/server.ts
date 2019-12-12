@@ -20,7 +20,12 @@ app.use(
   session({
     secret: "keyboard cat",
     resave: false,
-    saveUninitialized: true
+    rolling: true,
+    saveUninitialized: true,
+    cookie: {
+      httpOnly: true,
+      maxAge: 24 * 12 * 60 * 1000 // cookieの保存期間の設定(ms)
+    }
   })
 );
 
