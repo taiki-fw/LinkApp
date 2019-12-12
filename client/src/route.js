@@ -9,6 +9,7 @@ import TopPage from "./Container/TopPage";
 import CreateUser from "./Container/CreateUser";
 import Login from "./Container/Login";
 import Users from "./Container/Users";
+import BookMarks from "./Container/BookMarks";
 
 const Application = () => (
   <Router>
@@ -19,6 +20,7 @@ const Application = () => (
       <Route path="/user/registrations" component={CreateUser} />
       <Route path="/user/login" component={Login} />
       <Route path="/user/index" component={Users} />
+      <Route path="/bookmarks" component={BookMarks} />
       <Route component={noMatch} />
     </Switch>
   </Router>
