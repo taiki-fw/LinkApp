@@ -9,7 +9,8 @@ export default class Login extends React.Component {
     super(props);
     this.state = {
       email: "",
-      password: ""
+      password: "",
+      isSaved: false
     };
     this.handleChange = this.handleChange.bind(this);
   }
@@ -31,7 +32,8 @@ export default class Login extends React.Component {
       .post("/api/user/login")
       .send({
         email: this.state.email,
-        password: this.state.password
+        password: this.state.password,
+        isSaved: this.state.isSaved
       })
       .end((err, res) => {
         if (err) {
@@ -66,6 +68,15 @@ export default class Login extends React.Component {
             value={this.state.password}
             handleChange={this.handleChange}
           />
+          <label>
+            <input
+              type="checkbox"
+              checked={this.state.isSaved}
+              onChange={() => this.setState({ isSaved: !this.state.isSaved })}
+            />
+            パスワードの保存
+          </label>
+          <br />
           <input type="submit" value="Login" />
         </form>
         <p>
