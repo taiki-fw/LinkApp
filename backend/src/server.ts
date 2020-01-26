@@ -170,6 +170,7 @@ app.post("/api/user/login", (req, res) => {
       const account = result.rows[0];
       if (bcrypt.compareSync(q.password, account.password)) {
         req.session.user_id = account.user_id;
+        if (!q.isSaved) req.session.cookie.expires = false;
         sendJSON(res, true, { msg: "userの認証に成功しました" });
       }
     })
